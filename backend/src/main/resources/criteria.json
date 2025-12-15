@@ -1,0 +1,152 @@
+{
+  "criteria": [
+    {
+      "id": "A04",
+      "title": "Zeitplan",
+      "question": "Was sind die Anforderungen an den Zeitplan?",
+      "requirements": [
+        {
+          "id": "A04-1",
+          "description": "Der Zeitplan ist Bestandteil von Teil 1 des IPA-Berichts.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "A04-2",
+          "description": "Der Zeitplan ist übersichtlich gestaltet.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "A04-3",
+          "description": "Struktur und Elemente des Zeitplans orientieren sich nach der gewählten Projektmethode.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "A04-4",
+          "description": "Der Zeitplan enthält realistische Zeitschätzungen.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "A04-5",
+          "description": "Der Zeitplan wird während der Projektlaufzeit aktualisiert und dokumentiert.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "A04-6",
+          "description": "Abweichungen vom Zeitplan werden dokumentiert und begründet.",
+          "module": "BF",
+          "part": 1
+        }
+      ],
+      "qualityLevels": {
+        "0": "Weniger als 2 Anforderungen erfüllt",
+        "1": "2-3 Anforderungen erfüllt",
+        "2": "4-5 Anforderungen erfüllt",
+        "3": "Alle Anforderungen erfüllt"
+      }
+    },
+    {
+      "id": "H06",
+      "title": "Automatisierung des Auslieferungsprozesses",
+      "question": "Wie wird der Auslieferungsprozess automatisiert?",
+      "requirements": [
+        {
+          "id": "H06-1",
+          "description": "Es existiert ein automatisierter Build-Prozess.",
+          "module": "BF",
+          "part": 2
+        },
+        {
+          "id": "H06-2",
+          "description": "Der Build-Prozess wird bei jedem Commit automatisch ausgeführt.",
+          "module": "BF",
+          "part": 2
+        },
+        {
+          "id": "H06-3",
+          "description": "Bei Fehlern im Build-Prozess wird die Pipeline gestoppt.",
+          "module": "BF",
+          "part": 2
+        },
+        {
+          "id": "H06-4",
+          "description": "Unit- und Integrationstests werden automatisch ausgeführt.",
+          "module": "BF",
+          "part": 2
+        },
+        {
+          "id": "H06-5",
+          "description": "Die Testergebnisse sind im CI/CD-System sichtbar.",
+          "module": "BF",
+          "part": 2
+        },
+        {
+          "id": "H06-6",
+          "description": "Mindestens 80% der definierten Testfälle müssen bestehen.",
+          "module": "BF",
+          "part": 2
+        }
+      ],
+      "qualityLevels": {
+        "0": "Weniger als 2 Anforderungen erfüllt",
+        "1": "2-3 Anforderungen erfüllt",
+        "2": "4-5 Anforderungen erfüllt",
+        "3": "Alle Anforderungen erfüllt"
+      }
+    },
+    {
+      "id": "Doc03",
+      "title": "Formale Anforderungen an den IPA-Bericht",
+      "question": "Welche formalen Anforderungen müssen an den IPA-Bericht erfüllt sein?",
+      "requirements": [
+        {
+          "id": "Doc03-1",
+          "description": "Der IPA-Bericht ist vollständig und enthält alle erforderlichen Bestandteile.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "Doc03-2",
+          "description": "Die Dokumentation ist für eine externe Fachperson nachvollziehbar.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "Doc03-3",
+          "description": "Die Dokumentation ist konsistent formatiert und strukturiert.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "Doc03-4",
+          "description": "Alle Quellen und verwendeten Ressourcen sind korrekt zitiert.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "Doc03-5",
+          "description": "Die Dokumentation entspricht den vorgegebenen Formatierungsrichtlinien.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "Doc03-6",
+          "description": "Rechtschreibung und Grammatik sind korrekt.",
+          "module": "BF",
+          "part": 1
+        }
+      ],
+      "qualityLevels": {
+        "0": "Weniger als 2 Anforderungen erfüllt",
+        "1": "2-3 Anforderungen erfüllt",
+        "2": "4-5 Anforderungen erfüllt",
+        "3": "Alle Anforderungen erfüllt"
+      }
+    }
+  ]
+}
+
