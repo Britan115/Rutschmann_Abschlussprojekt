@@ -25,8 +25,8 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 
 ## Arbeitspakete
 
-- AP-01: Projektsetup ✅
-- AP-02: Kriterienaufbereitung (A04, H06, Doc03) ✅
+- AP-01: Projektsetup (abgeschlossen)
+- AP-02: Kriterienaufbereitung (A04, H06, Doc03) (abgeschlossen)
 - AP-03 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
 
 ## Contributing
