@@ -27,7 +27,7 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 
 - AP-01: Projektsetup (abgeschlossen)
 - AP-02: Kriterienaufbereitung (A04, H06, Doc03) (abgeschlossen)
-- AP-03: Kriterien-API
+- AP-03: Kriterien-API (abgeschlossen)
 - AP-04 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
 
 ## Contributing
