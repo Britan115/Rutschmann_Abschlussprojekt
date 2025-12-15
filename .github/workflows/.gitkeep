@@ -1,0 +1,7 @@
+# Platzhalter für GitHub Actions Workflows
+
+Die CI/CD Pipeline wird in späteren Arbeitspaketen implementiert:
+- AP-10: CI Build & Lint
+- AP-11: Tests in Pipeline & Reporting
+- AP-12: Staging Deployment & Secrets
+
