@@ -30,7 +30,8 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-03: Kriterien-API (abgeschlossen)
 - AP-04: Personendaten erfassen (abgeschlossen)
 - AP-05: Kriterienfortschritt speichern (abgeschlossen)
-- AP-06 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
+- AP-06: Berechnungslogik & Summary API (abgeschlossen)
+- AP-07 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
 
 ## Contributing
 
