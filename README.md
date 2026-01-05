@@ -32,7 +32,8 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-05: Kriterienfortschritt speichern (abgeschlossen)
 - AP-06: Berechnungslogik & Summary API (abgeschlossen)
 - AP-07: Frontend Personenformular (abgeschlossen)
-- AP-08 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
+- AP-08: Frontend Kriterienansicht (abgeschlossen)
+- AP-09 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
 
 ## Contributing
 
