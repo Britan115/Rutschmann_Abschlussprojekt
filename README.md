@@ -29,7 +29,8 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-02: Kriterienaufbereitung (A04, H06, Doc03) (abgeschlossen)
 - AP-03: Kriterien-API (abgeschlossen)
 - AP-04: Personendaten erfassen (abgeschlossen)
-- AP-05 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
+- AP-05: Kriterienfortschritt speichern (abgeschlossen)
+- AP-06 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
 
 ## Contributing
 
