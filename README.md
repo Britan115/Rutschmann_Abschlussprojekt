@@ -16,7 +16,38 @@ Webapplikation zur Erfassung und Bewertung von IPA-Kriterien gemäss QV BiVo 202
 
 ## Setup
 
-> Setup-Anweisungen folgen in späteren Arbeitspaketen.
+### Voraussetzungen
+- Node.js (Version 18+)
+- Java JDK 17+
+- Maven 3.8+
+- Docker & Docker Compose
+
+### Start der Anwendung
+
+1. **Datenbank starten:**
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **Backend starten:**
+   ```bash
+   cd backend
+   mvn spring-boot:run
+   ```
+   Backend läuft auf: http://localhost:8080
+
+3. **Frontend starten** (in separatem Terminal):
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   Frontend läuft auf: http://localhost:5173
+
+### Erste Schritte
+1. Personendaten erfassen (Name, Vorname, Thema, Abgabedatum)
+2. Kriterien bearbeiten (Anforderungen abhaken, Notizen hinzufügen)
+3. Dashboard anzeigen (Gütestufen und mutmassliche Noten)
 
 ## Dokumentation
 
