@@ -37,6 +37,20 @@ export interface CriterionProgressRequest {
   notes: string;
 }
 
+export interface CriterionSummary {
+  criterionId: string;
+  criterionTitle: string;
+  fulfilledCount: number;
+  totalCount: number;
+  qualityLevel: number;
+}
+
+export interface SummaryResponse {
+  criteriaSummaries: CriterionSummary[];
+  estimatedGradePart1: number | null;
+  estimatedGradePart2: number | null;
+}
+
 export const personService = {
   async createPerson(person: Person): Promise<Person> {
     const response = await fetch(`${API_BASE_URL}/person`, {
@@ -90,6 +104,21 @@ export const criteriaService = {
     if (!response.ok) {
       throw new Error('Fehler beim Speichern des Fortschritts');
     }
+  },
+
+  async getSummary(personId: number): Promise<SummaryResponse> {
+    const response = await fetch(`${API_BASE_URL}/person/${personId}/summary`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Fehler beim Laden der Zusammenfassung');
+    }
+
+    return response.json();
   },
 };
 
