@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { criteriaService } from '../services/api';
 import type { SummaryResponse, CriterionSummary } from '../services/api';
 
@@ -11,11 +11,7 @@ export default function Dashboard({ personId }: DashboardProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadSummary();
-  }, [personId]);
-
-  const loadSummary = async () => {
+  const loadSummary = useCallback(async () => {
     try {
       setLoading(true);
       const response = await criteriaService.getSummary(personId);
@@ -25,7 +21,11 @@ export default function Dashboard({ personId }: DashboardProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [personId]);
+
+  useEffect(() => {
+    loadSummary();
+  }, [loadSummary]);
 
   const getQualityLevelLabel = (level: number): string => {
     switch (level) {
