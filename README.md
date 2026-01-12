@@ -65,7 +65,9 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-07: Frontend Personenformular (abgeschlossen)
 - AP-08: Frontend Kriterienansicht (abgeschlossen)
 - AP-09: Frontend Dashboard (abgeschlossen)
-- AP-10 bis AP-18: [siehe Arbeitspaket-Liste in Projektplanung]
+- AP-10: CI Pipeline Build & Lint (abgeschlossen)
+- AP-11: Testintegration (abgeschlossen)
+- AP-12 bis AP-18: [in Bearbeitung]
 
 ## Contributing
 
