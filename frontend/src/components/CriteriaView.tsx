@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import {
-  criteriaService,
+import { criteriaService } from '../services/api';
+import type {
   Criteria,
   Requirement,
   CriterionProgressRequest,

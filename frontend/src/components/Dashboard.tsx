@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { criteriaService, SummaryResponse, CriterionSummary } from '../services/api';
+import { criteriaService } from '../services/api';
+import type { SummaryResponse, CriterionSummary } from '../services/api';
 
 interface DashboardProps {
   personId: number;

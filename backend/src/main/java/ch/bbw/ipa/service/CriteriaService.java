@@ -63,7 +63,9 @@ public class CriteriaService {
             criteria.add(criterion);
         }
         
-        return new CriteriaResponse(criteria);
+        CriteriaResponse response = new CriteriaResponse();
+        response.setCriteria(criteria);
+        return response;
     }
 }
 

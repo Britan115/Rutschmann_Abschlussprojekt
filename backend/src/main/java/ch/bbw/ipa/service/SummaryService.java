@@ -9,6 +9,7 @@ import ch.bbw.ipa.model.Person;
 import ch.bbw.ipa.repository.CriterionProgressRepository;
 import ch.bbw.ipa.repository.PersonRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class SummaryService {
         this.personRepository = personRepository;
     }
 
+    @Transactional(readOnly = true)
     public SummaryResponse calculateSummary(Long personId) throws Exception {
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new RuntimeException("Person nicht gefunden"));
