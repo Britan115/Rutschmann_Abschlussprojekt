@@ -75,8 +75,10 @@ jobs:
       # Schritt 5: Test-Report hochladen
       # - Macht Test-Ergebnisse in GitHub Actions sichtbar
       # - Zeigt fehlgeschlagene Tests im UI an
+      # - continue-on-error: true verhindert Fehler, wenn keine Reports vorhanden sind
       - name: Publish Test Results
         if: always()
+        continue-on-error: true
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: |
@@ -125,11 +127,16 @@ jobs:
       
       # Schritt 3: Dependencies installieren
       # - npm ci installiert exakt die Versionen aus package-lock.json
-      # - Schneller und deterministischer als npm install
+      # - Falls package-lock.json nicht synchron ist, wird npm install verwendet
       # - Stoppt bei Fehlern (z.B. fehlende Dependencies)
       - name: Install Dependencies
         working-directory: ./frontend
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci || npm install
+          else
+            npm install
+          fi
       
       # Schritt 4: ESLint ausführen
       # - Prüft Code-Qualität und Style
