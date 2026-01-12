@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PersonForm from './components/PersonForm';
 import CriteriaView from './components/CriteriaView';
 import Dashboard from './components/Dashboard';
-import { Person } from './services/api';
+import type { Person } from './services/api';
 import './App.css';
 
 type ViewMode = 'form' | 'criteria' | 'dashboard';

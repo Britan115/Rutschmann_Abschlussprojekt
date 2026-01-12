@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { personService, Person } from '../services/api';
+import { personService } from '../services/api';
+import type { Person } from '../services/api';
 
 interface PersonFormProps {
   onSuccess?: (person: Person) => void;
