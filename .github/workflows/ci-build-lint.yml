@@ -1,13 +1,15 @@
 # ============================================================================
-# CI Pipeline: Build & Lint
+# CI Pipeline: Build, Lint & Tests
 # ============================================================================
 # Diese Pipeline stellt sicher, dass:
 # - Der Code kompiliert (Backend & Frontend)
 # - Code-Qualität durch Linting geprüft wird
+# - Unit- und Integrationstests automatisch ausgeführt werden
+# - Testergebnisse sind in GitHub Actions sichtbar
 # - Die Pipeline bei Fehlern abbricht
 # ============================================================================
 
-name: CI Build & Lint
+name: CI Build, Lint & Tests
 
 # ============================================================================
 # Trigger: Wann wird die Pipeline ausgeführt?
@@ -26,15 +28,16 @@ on:
 # ============================================================================
 jobs:
   # ========================================================================
-  # Job 1: Backend Build & Lint
+  # Job 1: Backend Build, Test & Lint
   # ========================================================================
   # - Kompiliert den Java-Code mit Maven
+  # - Führt Unit- und Integrationstests aus (JUnit)
+  # - Erstellt Test-Reports (sichtbar in GitHub Actions)
   # - Erstellt das JAR-Package
-  # - Prüft Code-Qualität (falls Linter konfiguriert)
   # - Stoppt bei Fehlern (automatisch durch Maven)
   # ========================================================================
-  backend-build:
-    name: Backend Build & Lint
+  backend-build-test:
+    name: Backend Build & Tests
     runs-on: ubuntu-latest
     
     steps:
@@ -60,25 +63,50 @@ jobs:
         working-directory: ./backend
         run: mvn clean compile
       
-      # Schritt 4: Maven Package
+      # Schritt 4: Maven Test
+      # - Führt alle Unit- und Integrationstests aus (JUnit)
+      # - Erstellt Test-Reports in target/surefire-reports/
+      # - Stoppt bei Testfehlern (Exit Code != 0)
+      # - Auch wenn keine Tests existieren, wird dieser Schritt erfolgreich sein
+      - name: Run Backend Tests
+        working-directory: ./backend
+        run: mvn test
+      
+      # Schritt 5: Test-Report hochladen
+      # - Macht Test-Ergebnisse in GitHub Actions sichtbar
+      # - Zeigt fehlgeschlagene Tests im UI an
+      # - continue-on-error: true verhindert Fehler, wenn keine Reports vorhanden sind
+      - name: Publish Test Results
+        if: always()
+        continue-on-error: true
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: |
+            backend/target/surefire-reports/**/*.xml
+          check_name: Backend Test Results
+          comment_mode: create-new
+          report_individual_runs: true
+      
+      # Schritt 6: Maven Package
       # - Erstellt das JAR-Package
-      # - Tests werden übersprungen (werden in AP-11 integriert)
       # - Stoppt bei Fehlern (Exit Code != 0)
       - name: Maven Package
         working-directory: ./backend
         run: mvn package -DskipTests
 
   # ========================================================================
-  # Job 2: Frontend Build & Lint
+  # Job 2: Frontend Build, Test & Lint
   # ========================================================================
   # - Installiert Frontend-Dependencies
   # - Führt ESLint aus (Code-Qualitätsprüfung)
   # - Prüft TypeScript-Typen
+  # - Führt Frontend-Tests aus (Vitest)
+  # - Erstellt Test-Coverage-Reports
   # - Erstellt Production-Build
   # - Stoppt bei Fehlern (jeder Schritt prüft Exit Code)
   # ========================================================================
-  frontend-build-lint:
-    name: Frontend Build & Lint
+  frontend-build-test-lint:
+    name: Frontend Build, Tests & Lint
     runs-on: ubuntu-latest
     
     steps:
@@ -99,11 +127,16 @@ jobs:
       
       # Schritt 3: Dependencies installieren
       # - npm ci installiert exakt die Versionen aus package-lock.json
-      # - Schneller und deterministischer als npm install
+      # - Falls package-lock.json nicht synchron ist, wird npm install verwendet
       # - Stoppt bei Fehlern (z.B. fehlende Dependencies)
       - name: Install Dependencies
         working-directory: ./frontend
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci || npm install
+          else
+            npm install
+          fi
       
       # Schritt 4: ESLint ausführen
       # - Prüft Code-Qualität und Style
@@ -121,7 +154,27 @@ jobs:
         working-directory: ./frontend
         run: npx tsc --noEmit
       
-      # Schritt 6: Frontend Production Build
+      # Schritt 6: Frontend Tests ausführen
+      # - Führt alle Vitest-Tests aus (Unit & Component Tests)
+      # - Erstellt Coverage-Reports
+      # - Stoppt bei Testfehlern (Exit Code != 0)
+      # - Auch wenn keine Tests existieren, wird dieser Schritt erfolgreich sein
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        run: npm run test
+      
+      # Schritt 7: Test-Coverage hochladen (optional)
+      # - Macht Coverage-Reports in GitHub Actions sichtbar
+      # - Wird nur ausgeführt, wenn Tests vorhanden sind
+      - name: Upload Coverage Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/
+          if-no-files-found: ignore
+      
+      # Schritt 8: Frontend Production Build
       # - Kompiliert TypeScript zu JavaScript
       # - Erstellt optimiertes Production-Bundle mit Vite
       # - Stoppt bei Build-Fehlern (Exit Code != 0)
