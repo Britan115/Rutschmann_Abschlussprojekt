@@ -18,7 +18,7 @@ public class CriterionProgress {
     @Column(nullable = false)
     private String criterionId;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "fulfilled_requirements", joinColumns = @JoinColumn(name = "progress_id"))
     @Column(name = "requirement_id")
     private Set<String> fulfilledRequirements;
