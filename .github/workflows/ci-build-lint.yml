@@ -1,0 +1,131 @@
+# ============================================================================
+# CI Pipeline: Build & Lint
+# ============================================================================
+# Diese Pipeline stellt sicher, dass:
+# - Der Code kompiliert (Backend & Frontend)
+# - Code-Qualität durch Linting geprüft wird
+# - Die Pipeline bei Fehlern abbricht
+# ============================================================================
+
+name: CI Build & Lint
+
+# ============================================================================
+# Trigger: Wann wird die Pipeline ausgeführt?
+# ============================================================================
+# - Bei jedem Push auf main oder feature/** Branches
+# - Bei jedem Pull Request auf main
+# ============================================================================
+on:
+  push:
+    branches: [ main, 'feature/**' ]
+  pull_request:
+    branches: [ main ]
+
+# ============================================================================
+# Jobs: Parallele Ausführung der Build-Schritte
+# ============================================================================
+jobs:
+  # ========================================================================
+  # Job 1: Backend Build & Lint
+  # ========================================================================
+  # - Kompiliert den Java-Code mit Maven
+  # - Erstellt das JAR-Package
+  # - Prüft Code-Qualität (falls Linter konfiguriert)
+  # - Stoppt bei Fehlern (automatisch durch Maven)
+  # ========================================================================
+  backend-build:
+    name: Backend Build & Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Schritt 1: Repository-Code auschecken
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      # Schritt 2: Java 17 Setup
+      # - Installiert Java 17 (Temurin Distribution)
+      # - Aktiviert Maven-Cache für schnellere Builds
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      
+      # Schritt 3: Maven Clean & Compile
+      # - Löscht alte Build-Artefakte (clean)
+      # - Kompiliert den Code (compile)
+      # - Stoppt bei Kompilierungsfehlern (Exit Code != 0)
+      - name: Maven Clean & Compile
+        working-directory: ./backend
+        run: mvn clean compile
+      
+      # Schritt 4: Maven Package
+      # - Erstellt das JAR-Package
+      # - Tests werden übersprungen (werden in AP-11 integriert)
+      # - Stoppt bei Fehlern (Exit Code != 0)
+      - name: Maven Package
+        working-directory: ./backend
+        run: mvn package -DskipTests
+
+  # ========================================================================
+  # Job 2: Frontend Build & Lint
+  # ========================================================================
+  # - Installiert Frontend-Dependencies
+  # - Führt ESLint aus (Code-Qualitätsprüfung)
+  # - Prüft TypeScript-Typen
+  # - Erstellt Production-Build
+  # - Stoppt bei Fehlern (jeder Schritt prüft Exit Code)
+  # ========================================================================
+  frontend-build-lint:
+    name: Frontend Build & Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Schritt 1: Repository-Code auschecken
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      # Schritt 2: Node.js Setup
+      # - Installiert Node.js Version 20
+      # - Aktiviert npm-Cache für schnellere Builds
+      # - Cache-Pfad zeigt auf frontend/package-lock.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      # Schritt 3: Dependencies installieren
+      # - npm ci installiert exakt die Versionen aus package-lock.json
+      # - Schneller und deterministischer als npm install
+      # - Stoppt bei Fehlern (z.B. fehlende Dependencies)
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm ci
+      
+      # Schritt 4: ESLint ausführen
+      # - Prüft Code-Qualität und Style
+      # - --max-warnings 0: Keine Warnungen erlaubt
+      # - Stoppt bei Fehlern oder Warnungen (Exit Code != 0)
+      - name: Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+      
+      # Schritt 5: TypeScript Type-Check
+      # - Prüft TypeScript-Typen ohne Code zu generieren (--noEmit)
+      # - Findet Type-Fehler vor dem Build
+      # - Stoppt bei Type-Fehlern (Exit Code != 0)
+      - name: TypeScript Type Check
+        working-directory: ./frontend
+        run: npx tsc --noEmit
+      
+      # Schritt 6: Frontend Production Build
+      # - Kompiliert TypeScript zu JavaScript
+      # - Erstellt optimiertes Production-Bundle mit Vite
+      # - Stoppt bei Build-Fehlern (Exit Code != 0)
+      - name: Frontend Build
+        working-directory: ./frontend
+        run: npm run build
+
