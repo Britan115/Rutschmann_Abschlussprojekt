@@ -31,8 +31,9 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
 # Healthcheck
+# Prüft ob die Anwendung läuft (ohne Actuator)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/criteria || exit 1
 
 # Starte Anwendung
 ENTRYPOINT ["java", "-jar", "app.jar"]
