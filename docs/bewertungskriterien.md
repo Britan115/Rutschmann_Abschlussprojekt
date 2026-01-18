@@ -4,6 +4,40 @@ Kurze Übersicht, wo jedes Kriterium im Projekt erfüllt wird.
 
 ---
 
+## Anwendung starten
+
+**Voraussetzungen:**
+- Node.js (Version 18+)
+- Java JDK 17+
+- Maven 3.8+
+- Docker & Docker Compose
+
+**Start-Schritte:**
+
+1. **Datenbank starten:**
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **Backend starten:**
+   ```bash
+   cd backend
+   mvn spring-boot:run
+   ```
+   Backend läuft auf: http://localhost:8080
+
+3. **Frontend starten (in separatem Terminal):**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   Frontend läuft auf: http://localhost:5173
+
+**Detaillierte Anleitung:** Siehe `README.md` (Zeilen 17-50)
+
+---
+
 ## Modul 324 - DevOps
 
 ### 1. Automatisierung (30%)
