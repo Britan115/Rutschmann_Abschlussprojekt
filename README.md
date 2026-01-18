@@ -52,7 +52,7 @@ Webapplikation zur Erfassung und Bewertung von IPA-Kriterien gemäss QV BiVo 202
 ## Dokumentation
 
 Detaillierte Dokumentation im `/docs` Verzeichnis:
-- `architektur.md`, `criteria.md`, `testkonzept.md`, `testfaelle.md`, `pipeline.md`, `ki-nutzung.md`
+- `architektur.md`, `criteria.md`, `testkonzept.md`, `testfaelle.md`, `testprotokoll.md`, `pipeline.md`, `ki-nutzung.md`
 
 ## Arbeitspakete
 
@@ -71,7 +71,8 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-13: Testkonzept (abgeschlossen)
 - AP-14: Testfalldokumentation (abgeschlossen)
 - AP-15: Automatisierte Tests (abgeschlossen)
-- AP-16 bis AP-18: [in Bearbeitung]
+- AP-16: Testergebnis-Protokoll (abgeschlossen)
+- AP-17 bis AP-18: [in Bearbeitung]
 
 ## Contributing
 
