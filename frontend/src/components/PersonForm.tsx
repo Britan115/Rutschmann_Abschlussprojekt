@@ -88,10 +88,10 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
       margin: '0 auto',
       backgroundColor: '#ffffff',
       padding: '2rem',
-      borderRadius: '8px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+      borderRadius: '4px',
+      border: '1px solid #dee2e6'
     }}>
-      <h2 style={{ marginTop: 0, marginBottom: '1.5rem', color: '#213547' }}>
+      <h2 style={{ marginTop: 0, marginBottom: '1.5rem', color: '#2c3e50', fontSize: '1.25rem' }}>
         Personendaten erfassen
       </h2>
 
@@ -107,16 +107,10 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           onChange={handleChange}
           style={{
             width: '100%',
-            padding: '0.75rem',
-            border: errors.name ? '2px solid #dc3545' : '1px solid #ced4da',
-            borderRadius: '6px',
-            fontSize: '1rem',
-            transition: 'border-color 0.2s ease',
+            border: errors.name ? '1px solid #dc3545' : '1px solid #ced4da',
           }}
-          onFocus={(e) => e.target.style.borderColor = '#007bff'}
-          onBlur={(e) => e.target.style.borderColor = errors.name ? '#dc3545' : '#ced4da'}
         />
-        {errors.name && <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.name}</span>}
+        {errors.name && <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.name}</span>}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -131,17 +125,11 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           onChange={handleChange}
           style={{
             width: '100%',
-            padding: '0.75rem',
-            border: errors.vorname ? '2px solid #dc3545' : '1px solid #ced4da',
-            borderRadius: '6px',
-            fontSize: '1rem',
-            transition: 'border-color 0.2s ease',
+            border: errors.vorname ? '1px solid #dc3545' : '1px solid #ced4da',
           }}
-          onFocus={(e) => e.target.style.borderColor = '#007bff'}
-          onBlur={(e) => e.target.style.borderColor = errors.vorname ? '#dc3545' : '#ced4da'}
         />
         {errors.vorname && (
-          <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.vorname}</span>
+          <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.vorname}</span>
         )}
       </div>
 
@@ -157,17 +145,11 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           onChange={handleChange}
           style={{
             width: '100%',
-            padding: '0.75rem',
-            border: errors.thema ? '2px solid #dc3545' : '1px solid #ced4da',
-            borderRadius: '6px',
-            fontSize: '1rem',
-            transition: 'border-color 0.2s ease',
+            border: errors.thema ? '1px solid #dc3545' : '1px solid #ced4da',
           }}
-          onFocus={(e) => e.target.style.borderColor = '#007bff'}
-          onBlur={(e) => e.target.style.borderColor = errors.thema ? '#dc3545' : '#ced4da'}
         />
         {errors.thema && (
-          <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.thema}</span>
+          <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.thema}</span>
         )}
       </div>
 
@@ -183,17 +165,11 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           onChange={handleChange}
           style={{
             width: '100%',
-            padding: '0.75rem',
-            border: errors.abgabedatum ? '2px solid #dc3545' : '1px solid #ced4da',
-            borderRadius: '6px',
-            fontSize: '1rem',
-            transition: 'border-color 0.2s ease',
+            border: errors.abgabedatum ? '1px solid #dc3545' : '1px solid #ced4da',
           }}
-          onFocus={(e) => e.target.style.borderColor = '#007bff'}
-          onBlur={(e) => e.target.style.borderColor = errors.abgabedatum ? '#dc3545' : '#ced4da'}
         />
         {errors.abgabedatum && (
-          <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.abgabedatum}</span>
+          <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.abgabedatum}</span>
         )}
       </div>
 
@@ -206,16 +182,6 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
         disabled={isSubmitting}
         style={{
           width: '100%',
-          padding: '0.875rem',
-          backgroundColor: isSubmitting ? '#6c757d' : '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: isSubmitting ? 'not-allowed' : 'pointer',
-          fontSize: '1rem',
-          fontWeight: 600,
-          transition: 'all 0.2s ease',
-          boxShadow: isSubmitting ? 'none' : '0 2px 4px rgba(0,123,255,0.2)',
           marginTop: '0.5rem'
         }}
       >

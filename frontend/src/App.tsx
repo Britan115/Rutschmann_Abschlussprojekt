@@ -20,62 +20,49 @@ function App() {
   return (
     <div className="App">
       <header style={{ 
-        padding: '1.5rem 2rem', 
+        padding: '1.25rem 2rem', 
         backgroundColor: '#ffffff', 
-        borderBottom: '2px solid #e9ecef',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+        borderBottom: '1px solid #dee2e6',
         marginBottom: '2rem'
       }}>
         <h1 style={{ 
           margin: 0, 
-          fontSize: '1.75rem', 
+          fontSize: '1.5rem', 
           fontWeight: 600, 
-          color: '#213547' 
+          color: '#2c3e50' 
         }}>
           IPA-Kriterien Erfassungsapplikation
         </h1>
       </header>
-      <main style={{ padding: '0 2rem 2rem' }}>
+      <main style={{ padding: '0 2rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
         {!currentPerson ? (
           <PersonForm onSuccess={handlePersonSaved} />
         ) : (
           <div>
             <div style={{ 
-              marginBottom: '2rem', 
-              padding: '1rem 1.5rem', 
+              marginBottom: '1.5rem', 
+              padding: '1rem 1.25rem', 
               backgroundColor: '#ffffff', 
-              borderRadius: '8px',
-              border: '1px solid #e9ecef',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+              borderRadius: '4px',
+              border: '1px solid #dee2e6'
             }}>
-              <strong style={{ color: '#495057' }}>Erfasste Person:</strong>{' '}
-              <span style={{ color: '#007bff', fontWeight: 500 }}>
-                {currentPerson.vorname} {currentPerson.name}
+              <span style={{ color: '#495057', fontSize: '0.9375rem' }}>
+                <strong>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
               </span>
-              {' - '}
-              <span style={{ color: '#6c757d' }}>{currentPerson.thema}</span>
             </div>
 
             <nav style={{ 
-              marginBottom: '2rem', 
+              marginBottom: '1.5rem', 
               display: 'flex', 
-              gap: '1rem', 
+              gap: '0.75rem', 
               justifyContent: 'center',
-              flexWrap: 'wrap'
+              borderBottom: '1px solid #dee2e6',
+              paddingBottom: '1rem'
             }}>
               <button
                 onClick={() => setViewMode('criteria')}
                 style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: viewMode === 'criteria' ? '#007bff' : '#6c757d',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  transition: 'all 0.2s ease',
-                  boxShadow: viewMode === 'criteria' ? '0 4px 8px rgba(0,123,255,0.3)' : '0 2px 4px rgba(0,0,0,0.1)'
+                  backgroundColor: viewMode === 'criteria' ? '#495057' : '#6c757d',
                 }}
               >
                 Kriterien bearbeiten
@@ -83,16 +70,7 @@ function App() {
               <button
                 onClick={() => setViewMode('dashboard')}
                 style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: viewMode === 'dashboard' ? '#007bff' : '#6c757d',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  transition: 'all 0.2s ease',
-                  boxShadow: viewMode === 'dashboard' ? '0 4px 8px rgba(0,123,255,0.3)' : '0 2px 4px rgba(0,0,0,0.1)'
+                  backgroundColor: viewMode === 'dashboard' ? '#495057' : '#6c757d',
                 }}
               >
                 Dashboard

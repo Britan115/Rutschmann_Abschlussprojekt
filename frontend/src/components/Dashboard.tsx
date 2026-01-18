@@ -69,7 +69,7 @@ export default function Dashboard({ personId }: DashboardProps) {
   }
 
   if (error) {
-    return <div style={{ color: 'red' }}>{error}</div>;
+    return <div style={{ color: '#dc3545' }}>{error}</div>;
   }
 
   if (!summary) {
@@ -77,61 +77,53 @@ export default function Dashboard({ personId }: DashboardProps) {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-      <h2 style={{ marginBottom: '1.5rem', color: '#213547' }}>Dashboard - Übersicht</h2>
+    <div>
+      <h2 style={{ marginBottom: '1.25rem', color: '#2c3e50', fontSize: '1.25rem' }}>Dashboard - Übersicht</h2>
 
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '1.5rem',
+          gap: '1rem',
           marginBottom: '2rem',
         }}
       >
         <div
           style={{
-            border: '2px solid #007bff',
-            borderRadius: '12px',
-            padding: '2rem',
+            border: '1px solid #dee2e6',
+            borderRadius: '4px',
+            padding: '1.5rem',
             backgroundColor: '#ffffff',
-            boxShadow: '0 4px 8px rgba(0,123,255,0.1)',
-            transition: 'transform 0.2s ease',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
         >
-          <h3 style={{ marginTop: 0, marginBottom: '1rem', color: '#007bff', fontSize: '1.25rem' }}>Teil 1</h3>
-          <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#007bff', marginBottom: '0.5rem' }}>
+          <h3 style={{ marginTop: 0, marginBottom: '0.75rem', color: '#495057', fontSize: '1rem', fontWeight: 600 }}>Teil 1</h3>
+          <div style={{ fontSize: '2rem', fontWeight: 600, color: '#2c3e50', marginBottom: '0.5rem' }}>
             {formatGrade(summary.estimatedGradePart1)}
           </div>
-          <div style={{ fontSize: '0.9rem', color: '#6c757d', fontWeight: 500 }}>
+          <div style={{ fontSize: '0.8125rem', color: '#6c757d' }}>
             Mutmassliche Note
           </div>
         </div>
 
         <div
           style={{
-            border: '2px solid #28a745',
-            borderRadius: '12px',
-            padding: '2rem',
+            border: '1px solid #dee2e6',
+            borderRadius: '4px',
+            padding: '1.5rem',
             backgroundColor: '#ffffff',
-            boxShadow: '0 4px 8px rgba(40,167,69,0.1)',
-            transition: 'transform 0.2s ease',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
         >
-          <h3 style={{ marginTop: 0, marginBottom: '1rem', color: '#28a745', fontSize: '1.25rem' }}>Teil 2</h3>
-          <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#28a745', marginBottom: '0.5rem' }}>
+          <h3 style={{ marginTop: 0, marginBottom: '0.75rem', color: '#495057', fontSize: '1rem', fontWeight: 600 }}>Teil 2</h3>
+          <div style={{ fontSize: '2rem', fontWeight: 600, color: '#2c3e50', marginBottom: '0.5rem' }}>
             {formatGrade(summary.estimatedGradePart2)}
           </div>
-          <div style={{ fontSize: '0.9rem', color: '#6c757d', fontWeight: 500 }}>
+          <div style={{ fontSize: '0.8125rem', color: '#6c757d' }}>
             Mutmassliche Note
           </div>
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '1rem' }}>Gütestufen pro Kriterium</h3>
+      <h3 style={{ marginBottom: '1rem', color: '#2c3e50', fontSize: '1.125rem' }}>Gütestufen pro Kriterium</h3>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {summary.criteriaSummaries.map((criterion: CriterionSummary) => {
@@ -142,22 +134,18 @@ export default function Dashboard({ personId }: DashboardProps) {
             <div
               key={criterion.criterionId}
               style={{
-                border: `2px solid ${qualityColor}`,
-                borderRadius: '10px',
-                padding: '1.75rem',
+                border: '1px solid #dee2e6',
+                borderRadius: '4px',
+                padding: '1.5rem',
                 backgroundColor: '#ffffff',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
-                transition: 'box-shadow 0.2s ease',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.12)'}
-              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)'}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <div>
-                  <h4 style={{ marginTop: 0, marginBottom: '0.5rem' }}>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ marginTop: 0, marginBottom: '0.5rem', color: '#2c3e50', fontSize: '1rem', fontWeight: 600 }}>
                     {criterion.criterionId}: {criterion.criterionTitle}
                   </h4>
-                  <div style={{ fontSize: '0.9rem', color: '#666' }}>
+                  <div style={{ fontSize: '0.875rem', color: '#6c757d' }}>
                     {criterion.fulfilledCount} von {criterion.totalCount} Anforderungen erfüllt
                   </div>
                 </div>
@@ -165,23 +153,25 @@ export default function Dashboard({ personId }: DashboardProps) {
                   style={{
                     backgroundColor: qualityColor,
                     color: 'white',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '4px',
-                    fontWeight: 'bold',
-                    fontSize: '1.2rem',
+                    padding: '0.375rem 0.75rem',
+                    borderRadius: '3px',
+                    fontWeight: 600,
+                    fontSize: '1rem',
+                    minWidth: '2.5rem',
+                    textAlign: 'center',
                   }}
                 >
                   {criterion.qualityLevel}
                 </div>
               </div>
 
-              <div style={{ marginBottom: '0.5rem' }}>
+              <div style={{ marginBottom: '0.75rem' }}>
                 <div
                   style={{
                     width: '100%',
-                    height: '8px',
+                    height: '6px',
                     backgroundColor: '#e9ecef',
-                    borderRadius: '4px',
+                    borderRadius: '3px',
                     overflow: 'hidden',
                   }}
                 >
@@ -196,7 +186,7 @@ export default function Dashboard({ personId }: DashboardProps) {
                 </div>
               </div>
 
-              <div style={{ fontSize: '0.875rem', color: '#666' }}>
+              <div style={{ fontSize: '0.8125rem', color: '#6c757d' }}>
                 {getQualityLevelLabel(criterion.qualityLevel)}
               </div>
             </div>
@@ -205,25 +195,10 @@ export default function Dashboard({ personId }: DashboardProps) {
       </div>
 
       <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-        <button
-          onClick={loadSummary}
-          style={{
-            padding: '0.875rem 2rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '1rem',
-            fontWeight: 600,
-            boxShadow: '0 2px 4px rgba(0,123,255,0.2)',
-            transition: 'all 0.2s ease',
-          }}
-        >
+        <button onClick={loadSummary}>
           Aktualisieren
         </button>
       </div>
     </div>
   );
 }
-
