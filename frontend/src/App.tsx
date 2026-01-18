@@ -56,7 +56,7 @@ function App() {
             <nav style={{ 
               marginBottom: '2rem', 
               display: 'flex', 
-              gap: '1rem', 
+              gap: '1.5rem', 
               justifyContent: 'center',
               flexWrap: 'wrap'
             }}>
@@ -64,6 +64,9 @@ function App() {
                 onClick={() => setViewMode('criteria')}
                 style={{
                   backgroundColor: viewMode === 'criteria' ? '#2563eb' : '#6b7280',
+                  padding: '18px 40px',
+                  fontSize: '1.125rem',
+                  minHeight: '60px',
                 }}
               >
                 Kriterien bearbeiten
@@ -72,6 +75,9 @@ function App() {
                 onClick={() => setViewMode('dashboard')}
                 style={{
                   backgroundColor: viewMode === 'dashboard' ? '#2563eb' : '#6b7280',
+                  padding: '18px 40px',
+                  fontSize: '1.125rem',
+                  minHeight: '60px',
                 }}
               >
                 Dashboard anzeigen
