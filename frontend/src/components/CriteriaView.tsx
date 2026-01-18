@@ -28,7 +28,6 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
       const response = await criteriaService.getCriteria();
       setCriteria(response.criteria);
 
-      // Initialisiere Progress für jedes Kriterium
       const initialProgress: Record<string, CriterionProgressRequest> = {};
       response.criteria.forEach((criterion) => {
         initialProgress[criterion.id] = {
@@ -107,16 +106,18 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
   };
 
   if (loading) {
-    return <div>Lade Kriterien...</div>;
+    return <div style={{ padding: '2rem', color: '#1a1a1a', fontSize: '1.125rem' }}>Lade Kriterien...</div>;
   }
 
   if (error) {
-    return <div style={{ color: 'red' }}>{error}</div>;
+    return <div style={{ padding: '2rem', color: '#dc2626', fontSize: '1.125rem', fontWeight: 600 }}>{error}</div>;
   }
 
   return (
     <div>
-      <h2 style={{ marginBottom: '1.25rem', color: '#2c3e50', fontSize: '1.25rem' }}>IPA-Kriterien</h2>
+      <h2 style={{ marginBottom: '1.5rem', color: '#1a1a1a', fontSize: '1.5rem', fontWeight: 700 }}>
+        IPA-Kriterien
+      </h2>
 
       {criteria.map((criterion) => {
         const currentProgress = progress[criterion.id] || {
@@ -130,20 +131,41 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
           <div
             key={criterion.id}
             style={{
-              border: '1px solid #dee2e6',
-              borderRadius: '4px',
-              padding: '1.5rem',
+              border: '1px solid #e5e7eb',
+              borderRadius: '12px',
+              padding: '1.75rem',
               marginBottom: '1.5rem',
               backgroundColor: '#ffffff',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <h3 style={{ marginTop: 0, marginBottom: '0.5rem', color: '#2c3e50', fontSize: '1.125rem' }}>
+            <h3 style={{ 
+              marginTop: 0, 
+              marginBottom: '0.75rem', 
+              color: '#1a1a1a', 
+              fontSize: '1.25rem',
+              fontWeight: 700 
+            }}>
               {criterion.id}: {criterion.title}
             </h3>
-            <p style={{ color: '#6c757d', marginBottom: '1.25rem', fontSize: '0.9375rem' }}>{criterion.question}</p>
+            <p style={{ 
+              color: '#4b5563', 
+              marginBottom: '1.5rem', 
+              fontSize: '1rem',
+              lineHeight: 1.6 
+            }}>
+              {criterion.question}
+            </p>
 
-            <div style={{ marginBottom: '1rem' }}>
-              <h4>Anforderungen:</h4>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h4 style={{ 
+                marginBottom: '1rem', 
+                color: '#1a1a1a', 
+                fontSize: '1.125rem',
+                fontWeight: 600 
+              }}>
+                Anforderungen:
+              </h4>
               {criterion.requirements.map((requirement: Requirement) => {
                 const isChecked = currentProgress.fulfilledRequirements.includes(
                   requirement.id
@@ -155,7 +177,11 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
                     style={{
                       display: 'flex',
                       alignItems: 'flex-start',
-                      marginBottom: '0.75rem',
+                      marginBottom: '1rem',
+                      padding: '0.75rem',
+                      backgroundColor: isChecked ? '#f0fdf4' : '#f9fafb',
+                      borderRadius: '8px',
+                      border: isChecked ? '1px solid #86efac' : '1px solid #e5e7eb',
                     }}
                   >
                     <input
@@ -163,28 +189,41 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
                       id={`${criterion.id}-${requirement.id}`}
                       checked={isChecked}
                       onChange={() => handleRequirementToggle(criterion.id, requirement.id)}
-                      style={{ marginRight: '0.5rem', marginTop: '0.25rem' }}
+                      style={{ 
+                        marginRight: '12px', 
+                        marginTop: '3px',
+                        flexShrink: 0 
+                      }}
                     />
                     <label
                       htmlFor={`${criterion.id}-${requirement.id}`}
                       style={{
                         flex: 1,
                         cursor: 'pointer',
-                        textDecoration: isChecked ? 'line-through' : 'none',
-                        color: isChecked ? '#666' : 'inherit',
+                        color: '#1a1a1a',
+                        fontSize: '0.9375rem',
+                        lineHeight: 1.6,
+                        fontWeight: 400,
+                        margin: 0,
                       }}
                     >
-                      <strong>{requirement.id}:</strong> {requirement.description}
+                      <strong style={{ color: '#1a1a1a' }}>{requirement.id}:</strong> {requirement.description}
                     </label>
                   </div>
                 );
               })}
             </div>
 
-            <div style={{ marginBottom: '1.25rem' }}>
+            <div style={{ marginBottom: '1.5rem' }}>
               <label
                 htmlFor={`notes-${criterion.id}`}
-                style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}
+                style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  fontWeight: 600, 
+                  color: '#1a1a1a', 
+                  fontSize: '1rem' 
+                }}
               >
                 Notizen:
               </label>
@@ -192,7 +231,7 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
                 id={`notes-${criterion.id}`}
                 value={currentProgress.notes || ''}
                 onChange={(e) => handleNotesChange(criterion.id, e.target.value)}
-                placeholder="Notizen zu diesem Kriterium..."
+                placeholder="Notizen zu diesem Kriterium eingeben..."
                 rows={3}
                 style={{
                   width: '100%',
@@ -201,23 +240,38 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
               />
             </div>
 
-            <div style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#666' }}>
+            <div style={{ 
+              marginBottom: '1.25rem', 
+              fontSize: '1rem', 
+              color: '#1a1a1a',
+              fontWeight: 600,
+              padding: '0.75rem 1rem',
+              backgroundColor: '#f3f4f6',
+              borderRadius: '8px',
+              display: 'inline-block'
+            }}>
               Erfüllt: {fulfilledCount} von {totalCount} Anforderungen
             </div>
 
-            <button
-              onClick={() => handleSave(criterion.id)}
-              disabled={saving[criterion.id]}
-            >
-              {saving[criterion.id] ? 'Wird gespeichert...' : 'Fortschritt speichern'}
-            </button>
+            <div>
+              <button
+                onClick={() => handleSave(criterion.id)}
+                disabled={saving[criterion.id]}
+              >
+                {saving[criterion.id] ? 'Wird gespeichert...' : 'Fortschritt speichern'}
+              </button>
+            </div>
 
             {saveMessage[criterion.id] && (
               <div
                 style={{
-                  marginTop: '0.5rem',
-                  color: saveMessage[criterion.id].includes('Fehler') ? 'red' : 'green',
-                  fontSize: '0.875rem',
+                  marginTop: '1rem',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '8px',
+                  backgroundColor: saveMessage[criterion.id].includes('Fehler') ? '#fef2f2' : '#f0fdf4',
+                  color: saveMessage[criterion.id].includes('Fehler') ? '#dc2626' : '#16a34a',
+                  fontSize: '0.9375rem',
+                  fontWeight: 600,
                 }}
               >
                 {saveMessage[criterion.id]}
@@ -229,4 +283,3 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
     </div>
   );
 }
-

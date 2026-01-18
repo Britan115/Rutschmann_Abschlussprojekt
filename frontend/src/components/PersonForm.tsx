@@ -88,15 +88,22 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
       margin: '0 auto',
       backgroundColor: '#ffffff',
       padding: '2rem',
-      borderRadius: '4px',
-      border: '1px solid #dee2e6'
+      borderRadius: '12px',
+      border: '1px solid #e5e7eb',
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
     }}>
-      <h2 style={{ marginTop: 0, marginBottom: '1.5rem', color: '#2c3e50', fontSize: '1.25rem' }}>
+      <h2 style={{ 
+        marginTop: 0, 
+        marginBottom: '1.75rem', 
+        color: '#1a1a1a', 
+        fontSize: '1.5rem',
+        fontWeight: 700 
+      }}>
         Personendaten erfassen
       </h2>
 
-      <div style={{ marginBottom: '1.25rem' }}>
-        <label htmlFor="name" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <label htmlFor="name" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1a1a1a', fontSize: '1rem' }}>
           Name *
         </label>
         <input
@@ -108,14 +115,18 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           placeholder="z.B. Muster"
           style={{
             width: '100%',
-            border: errors.name ? '1px solid #dc3545' : '1px solid #ced4da',
+            border: errors.name ? '2px solid #dc2626' : '2px solid #d1d5db',
           }}
         />
-        {errors.name && <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.name}</span>}
+        {errors.name && (
+          <span style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '6px', display: 'block', fontWeight: 500 }}>
+            {errors.name}
+          </span>
+        )}
       </div>
 
-      <div style={{ marginBottom: '1.25rem' }}>
-        <label htmlFor="vorname" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <label htmlFor="vorname" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1a1a1a', fontSize: '1rem' }}>
           Vorname *
         </label>
         <input
@@ -127,16 +138,18 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           placeholder="z.B. Max"
           style={{
             width: '100%',
-            border: errors.vorname ? '1px solid #dc3545' : '1px solid #ced4da',
+            border: errors.vorname ? '2px solid #dc2626' : '2px solid #d1d5db',
           }}
         />
         {errors.vorname && (
-          <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.vorname}</span>
+          <span style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '6px', display: 'block', fontWeight: 500 }}>
+            {errors.vorname}
+          </span>
         )}
       </div>
 
-      <div style={{ marginBottom: '1.25rem' }}>
-        <label htmlFor="thema" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <label htmlFor="thema" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1a1a1a', fontSize: '1rem' }}>
           Thema der Arbeit *
         </label>
         <input
@@ -148,16 +161,18 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           placeholder="z.B. Entwicklung einer Webapplikation"
           style={{
             width: '100%',
-            border: errors.thema ? '1px solid #dc3545' : '1px solid #ced4da',
+            border: errors.thema ? '2px solid #dc2626' : '2px solid #d1d5db',
           }}
         />
         {errors.thema && (
-          <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.thema}</span>
+          <span style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '6px', display: 'block', fontWeight: 500 }}>
+            {errors.thema}
+          </span>
         )}
       </div>
 
-      <div style={{ marginBottom: '1.25rem' }}>
-        <label htmlFor="abgabedatum" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <label htmlFor="abgabedatum" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1a1a1a', fontSize: '1rem' }}>
           Abgabedatum *
         </label>
         <input
@@ -168,16 +183,27 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           onChange={handleChange}
           style={{
             width: '100%',
-            border: errors.abgabedatum ? '1px solid #dc3545' : '1px solid #ced4da',
+            border: errors.abgabedatum ? '2px solid #dc2626' : '2px solid #d1d5db',
           }}
         />
         {errors.abgabedatum && (
-          <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.abgabedatum}</span>
+          <span style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '6px', display: 'block', fontWeight: 500 }}>
+            {errors.abgabedatum}
+          </span>
         )}
       </div>
 
       {submitError && (
-        <div style={{ color: 'red', marginBottom: '1rem' }}>{submitError}</div>
+        <div style={{ 
+          color: '#dc2626', 
+          marginBottom: '1.5rem',
+          padding: '1rem',
+          backgroundColor: '#fef2f2',
+          borderRadius: '8px',
+          fontWeight: 500 
+        }}>
+          {submitError}
+        </div>
       )}
 
       <button
@@ -193,4 +219,3 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
     </form>
   );
 }
-

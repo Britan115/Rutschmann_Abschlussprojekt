@@ -1,9 +1,9 @@
 :root {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.5;
+  line-height: 1.6;
   font-weight: 400;
   color-scheme: light;
-  color: #2c3e50;
+  color: #1a1a1a;
   background-color: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -19,45 +19,45 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f8f9fa;
-  color: #2c3e50;
+  background-color: #f0f2f5;
+  color: #1a1a1a;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #2c3e50;
-  font-weight: 600;
+  color: #1a1a1a;
+  font-weight: 700;
   margin: 0;
 }
 
 button {
-  border-radius: 6px;
+  border-radius: 8px;
   border: none;
-  padding: 1rem 2rem;
-  font-size: 1rem;
+  padding: 14px 28px;
+  font-size: 1.0625rem;
   font-weight: 600;
   font-family: inherit;
-  background-color: #0056b3;
+  background-color: #2563eb;
   color: #ffffff;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 3px 6px rgba(0, 86, 179, 0.25);
-  min-height: 44px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  min-height: 52px;
 }
 
 button:hover:not(:disabled) {
-  background-color: #004085;
-  box-shadow: 0 5px 12px rgba(0, 86, 179, 0.35);
+  background-color: #1d4ed8;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
   transform: translateY(-2px);
 }
 
 button:active:not(:disabled) {
-  background-color: #003d7a;
+  background-color: #1e40af;
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 86, 179, 0.2);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
 button:disabled {
-  background-color: #adb5bd;
+  background-color: #9ca3af;
   cursor: not-allowed;
   opacity: 0.7;
   transform: none;
@@ -65,41 +65,49 @@ button:disabled {
 }
 
 button:focus {
-  outline: 3px solid #0056b3;
+  outline: 3px solid #2563eb;
   outline-offset: 2px;
 }
 
 input, textarea {
   font-family: inherit;
-  font-size: 0.9375rem;
-  padding: 0.75rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  color: #212529;
+  font-size: 1rem;
+  padding: 14px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  color: #1a1a1a;
   background-color: #ffffff;
-  transition: border-color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 input::placeholder, textarea::placeholder {
-  color: #6c757d;
-  opacity: 0.8;
+  color: #6b7280;
 }
 
 input:focus, textarea:focus {
   outline: none;
-  border-color: #0056b3;
-  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 input:disabled, textarea:disabled {
-  background-color: #e9ecef;
+  background-color: #f3f4f6;
   cursor: not-allowed;
 }
 
 label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
   font-weight: 600;
-  color: #212529;
+  color: #1a1a1a;
   font-size: 1rem;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  accent-color: #2563eb;
 }

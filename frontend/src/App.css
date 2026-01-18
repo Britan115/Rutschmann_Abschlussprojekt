@@ -2,7 +2,7 @@
   max-width: 1400px;
   margin: 0 auto;
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: #f0f2f5;
 }
 
 .App {
@@ -17,6 +17,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f7fa;
+  background-color: #f0f2f5;
 }
 

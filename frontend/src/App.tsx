@@ -22,14 +22,15 @@ function App() {
       <header style={{ 
         padding: '1.25rem 2rem', 
         backgroundColor: '#ffffff', 
-        borderBottom: '1px solid #dee2e6',
-        marginBottom: '2rem'
+        borderBottom: '1px solid #e5e7eb',
+        marginBottom: '2rem',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
       }}>
         <h1 style={{ 
           margin: 0, 
           fontSize: '1.5rem', 
-          fontWeight: 600, 
-          color: '#2c3e50' 
+          fontWeight: 700, 
+          color: '#1a1a1a' 
         }}>
           IPA-Kriterien Erfassungsapplikation
         </h1>
@@ -41,28 +42,28 @@ function App() {
           <div>
             <div style={{ 
               marginBottom: '1.5rem', 
-              padding: '1rem 1.25rem', 
+              padding: '1rem 1.5rem', 
               backgroundColor: '#ffffff', 
-              borderRadius: '4px',
-              border: '1px solid #dee2e6'
+              borderRadius: '8px',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
             }}>
-              <span style={{ color: '#212529', fontSize: '1rem', fontWeight: 500 }}>
-                <strong style={{ fontWeight: 600 }}>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
+              <span style={{ color: '#1a1a1a', fontSize: '1rem', fontWeight: 500 }}>
+                <strong style={{ fontWeight: 700 }}>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
               </span>
             </div>
 
             <nav style={{ 
-              marginBottom: '1.5rem', 
+              marginBottom: '2rem', 
               display: 'flex', 
-              gap: '0.75rem', 
+              gap: '1rem', 
               justifyContent: 'center',
-              borderBottom: '1px solid #dee2e6',
-              paddingBottom: '1rem'
+              flexWrap: 'wrap'
             }}>
               <button
                 onClick={() => setViewMode('criteria')}
                 style={{
-                  backgroundColor: viewMode === 'criteria' ? '#0056b3' : '#6c757d',
+                  backgroundColor: viewMode === 'criteria' ? '#2563eb' : '#6b7280',
                 }}
               >
                 Kriterien bearbeiten
@@ -70,10 +71,10 @@ function App() {
               <button
                 onClick={() => setViewMode('dashboard')}
                 style={{
-                  backgroundColor: viewMode === 'dashboard' ? '#0056b3' : '#6c757d',
+                  backgroundColor: viewMode === 'dashboard' ? '#2563eb' : '#6b7280',
                 }}
               >
-                Dashboard
+                Dashboard anzeigen
               </button>
             </nav>
 
@@ -87,4 +88,3 @@ function App() {
 }
 
 export default App;
-
