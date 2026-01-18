@@ -79,7 +79,6 @@ class SummaryServiceTest {
     @Test
     void testCalculateQualityLevel_AllFulfilled_Returns3() throws Exception {
         // TC-UNIT-001: Gütestufe 3 bei allen Anforderungen erfüllt
-        // Test über calculateSummary() mit vollständigen Daten
         CriteriaResponse criteriaResponse = new CriteriaResponse();
         criteriaResponse.setCriteria(Arrays.asList(testCriterion));
 
@@ -101,33 +100,69 @@ class SummaryServiceTest {
     }
 
     @Test
-    void testCalculateQualityLevel_FourFulfilled_Returns2() {
+    void testCalculateQualityLevel_FourFulfilled_Returns2() throws Exception {
         // TC-UNIT-002: Gütestufe 2 bei 4-5 Anforderungen erfüllt
-        int result4 = calculateQualityLevelHelper(4, 6);
-        assertEquals(2, result4, "4 Anforderungen erfüllt sollte Gütestufe 2 ergeben");
-        
-        int result5 = calculateQualityLevelHelper(5, 6);
-        assertEquals(2, result5, "5 Anforderungen erfüllt sollte Gütestufe 2 ergeben");
+        CriteriaResponse criteriaResponse = new CriteriaResponse();
+        criteriaResponse.setCriteria(Arrays.asList(testCriterion));
+
+        CriterionProgress progress = new CriterionProgress();
+        progress.setPerson(testPerson);
+        progress.setCriterionId("A04");
+        progress.setFulfilledRequirements(Set.of("A04-1", "A04-2", "A04-3", "A04-4"));
+
+        when(personRepository.findById(1L)).thenReturn(Optional.of(testPerson));
+        when(criteriaService.loadCriteria()).thenReturn(criteriaResponse);
+        when(criterionProgressRepository.findByPersonAndCriterionId(testPerson, "A04"))
+                .thenReturn(Optional.of(progress));
+
+        SummaryResponse response = summaryService.calculateSummary(1L);
+
+        assertNotNull(response);
+        assertEquals(2, response.getCriteriaSummaries().get(0).getQualityLevel());
     }
 
     @Test
-    void testCalculateQualityLevel_TwoThreeFulfilled_Returns1() {
+    void testCalculateQualityLevel_TwoThreeFulfilled_Returns1() throws Exception {
         // TC-UNIT-003: Gütestufe 1 bei 2-3 Anforderungen erfüllt
-        int result2 = calculateQualityLevelHelper(2, 6);
-        assertEquals(1, result2, "2 Anforderungen erfüllt sollte Gütestufe 1 ergeben");
-        
-        int result3 = calculateQualityLevelHelper(3, 6);
-        assertEquals(1, result3, "3 Anforderungen erfüllt sollte Gütestufe 1 ergeben");
+        CriteriaResponse criteriaResponse = new CriteriaResponse();
+        criteriaResponse.setCriteria(Arrays.asList(testCriterion));
+
+        CriterionProgress progress = new CriterionProgress();
+        progress.setPerson(testPerson);
+        progress.setCriterionId("A04");
+        progress.setFulfilledRequirements(Set.of("A04-1", "A04-2"));
+
+        when(personRepository.findById(1L)).thenReturn(Optional.of(testPerson));
+        when(criteriaService.loadCriteria()).thenReturn(criteriaResponse);
+        when(criterionProgressRepository.findByPersonAndCriterionId(testPerson, "A04"))
+                .thenReturn(Optional.of(progress));
+
+        SummaryResponse response = summaryService.calculateSummary(1L);
+
+        assertNotNull(response);
+        assertEquals(1, response.getCriteriaSummaries().get(0).getQualityLevel());
     }
 
     @Test
-    void testCalculateQualityLevel_LessThanTwoFulfilled_Returns0() {
+    void testCalculateQualityLevel_LessThanTwoFulfilled_Returns0() throws Exception {
         // TC-UNIT-004: Gütestufe 0 bei weniger als 2 Anforderungen erfüllt
-        int result0 = calculateQualityLevelHelper(0, 6);
-        assertEquals(0, result0, "0 Anforderungen erfüllt sollte Gütestufe 0 ergeben");
-        
-        int result1 = calculateQualityLevelHelper(1, 6);
-        assertEquals(0, result1, "1 Anforderung erfüllt sollte Gütestufe 0 ergeben");
+        CriteriaResponse criteriaResponse = new CriteriaResponse();
+        criteriaResponse.setCriteria(Arrays.asList(testCriterion));
+
+        CriterionProgress progress = new CriterionProgress();
+        progress.setPerson(testPerson);
+        progress.setCriterionId("A04");
+        progress.setFulfilledRequirements(Set.of("A04-1"));
+
+        when(personRepository.findById(1L)).thenReturn(Optional.of(testPerson));
+        when(criteriaService.loadCriteria()).thenReturn(criteriaResponse);
+        when(criterionProgressRepository.findByPersonAndCriterionId(testPerson, "A04"))
+                .thenReturn(Optional.of(progress));
+
+        SummaryResponse response = summaryService.calculateSummary(1L);
+
+        assertNotNull(response);
+        assertEquals(0, response.getCriteriaSummaries().get(0).getQualityLevel());
     }
 
     @Test
@@ -146,7 +181,7 @@ class SummaryServiceTest {
         assertNotNull(response);
         assertEquals(1, response.getCriteriaSummaries().size());
         // Kriterium mit allen Requirements part=1 sollte zu Teil 1 gehören
-        // Dies wird indirekt über die Notenberechnung getestet
+        assertNotNull(response.getEstimatedGradePart1());
     }
 
     @Test
@@ -195,21 +230,5 @@ class SummaryServiceTest {
         assertNotNull(response.getEstimatedGradePart1());
         // Gütestufe 0 → Note = 4.0 + (0.0 * 0.5) = 4.0
         assertEquals(4.0, response.getEstimatedGradePart1(), 0.01);
-    }
-
-    /**
-     * Helper-Methode um calculateQualityLevel zu testen
-     * Simuliert die Logik der privaten Methode
-     */
-    private int calculateQualityLevelHelper(int fulfilledCount, int totalCount) {
-        if (fulfilledCount == totalCount) {
-            return 3;
-        } else if (fulfilledCount >= 4 && fulfilledCount <= 5) {
-            return 2;
-        } else if (fulfilledCount >= 2 && fulfilledCount <= 3) {
-            return 1;
-        } else {
-            return 0;
-        }
     }
 }

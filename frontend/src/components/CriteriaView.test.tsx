@@ -43,7 +43,10 @@ describe('CriteriaView', () => {
     render(<CriteriaView personId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Zeitplan')).toBeInTheDocument();
+      // Der Text wird als "A04: Zeitplan" gerendert
+      // Es kann mehrere Elemente mit "Zeitplan" geben, daher getAllByText
+      const zeitplanElements = screen.getAllByText(/zeitplan/i);
+      expect(zeitplanElements.length).toBeGreaterThan(0);
       expect(api.criteriaService.getCriteria).toHaveBeenCalled();
     });
   });
@@ -79,7 +82,9 @@ describe('CriteriaView', () => {
     render(<CriteriaView personId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Zeitplan')).toBeInTheDocument();
+      // Es kann mehrere Elemente mit "Zeitplan" geben
+      const zeitplanElements = screen.getAllByText(/zeitplan/i);
+      expect(zeitplanElements.length).toBeGreaterThan(0);
     });
 
     const checkboxes = screen.getAllByRole('checkbox');

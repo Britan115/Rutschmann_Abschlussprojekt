@@ -165,6 +165,7 @@ class PersonControllerTest {
     void testGetSummary_ResponseContainsQualityLevels() throws Exception {
         // TC-API-017: Response enthält Gütestufen für alle Kriterien
         SummaryResponse summary = new SummaryResponse();
+        summary.setCriteriaSummaries(new java.util.ArrayList<>());
         when(summaryService.calculateSummary(1L)).thenReturn(summary);
 
         mockMvc.perform(get("/api/person/1/summary")

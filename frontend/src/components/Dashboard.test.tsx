@@ -96,7 +96,9 @@ describe('Dashboard', () => {
     render(<Dashboard personId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText(/nicht verfügbar/i)).toBeInTheDocument();
+      // "Nicht verfügbar" wird für Teil 1 und Teil 2 angezeigt
+      const notAvailableTexts = screen.getAllByText(/nicht verfügbar/i);
+      expect(notAvailableTexts.length).toBeGreaterThan(0);
     });
   });
 
