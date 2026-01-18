@@ -77,8 +77,8 @@ export default function Dashboard({ personId }: DashboardProps) {
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
-      <h2>Dashboard - Übersicht</h2>
+    <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      <h2 style={{ marginBottom: '1.5rem', color: '#213547' }}>Dashboard - Übersicht</h2>
 
       <div
         style={{
@@ -91,16 +91,20 @@ export default function Dashboard({ personId }: DashboardProps) {
         <div
           style={{
             border: '2px solid #007bff',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            backgroundColor: '#f8f9fa',
+            borderRadius: '12px',
+            padding: '2rem',
+            backgroundColor: '#ffffff',
+            boxShadow: '0 4px 8px rgba(0,123,255,0.1)',
+            transition: 'transform 0.2s ease',
           }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
         >
-          <h3 style={{ marginTop: 0, color: '#007bff' }}>Teil 1</h3>
-          <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#007bff' }}>
+          <h3 style={{ marginTop: 0, marginBottom: '1rem', color: '#007bff', fontSize: '1.25rem' }}>Teil 1</h3>
+          <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#007bff', marginBottom: '0.5rem' }}>
             {formatGrade(summary.estimatedGradePart1)}
           </div>
-          <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
+          <div style={{ fontSize: '0.9rem', color: '#6c757d', fontWeight: 500 }}>
             Mutmassliche Note
           </div>
         </div>
@@ -108,16 +112,20 @@ export default function Dashboard({ personId }: DashboardProps) {
         <div
           style={{
             border: '2px solid #28a745',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            backgroundColor: '#f8f9fa',
+            borderRadius: '12px',
+            padding: '2rem',
+            backgroundColor: '#ffffff',
+            boxShadow: '0 4px 8px rgba(40,167,69,0.1)',
+            transition: 'transform 0.2s ease',
           }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
         >
-          <h3 style={{ marginTop: 0, color: '#28a745' }}>Teil 2</h3>
-          <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#28a745' }}>
+          <h3 style={{ marginTop: 0, marginBottom: '1rem', color: '#28a745', fontSize: '1.25rem' }}>Teil 2</h3>
+          <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#28a745', marginBottom: '0.5rem' }}>
             {formatGrade(summary.estimatedGradePart2)}
           </div>
-          <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
+          <div style={{ fontSize: '0.9rem', color: '#6c757d', fontWeight: 500 }}>
             Mutmassliche Note
           </div>
         </div>
@@ -135,10 +143,14 @@ export default function Dashboard({ personId }: DashboardProps) {
               key={criterion.criterionId}
               style={{
                 border: `2px solid ${qualityColor}`,
-                borderRadius: '8px',
-                padding: '1.5rem',
-                backgroundColor: '#fff',
+                borderRadius: '10px',
+                padding: '1.75rem',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                transition: 'box-shadow 0.2s ease',
               }}
+              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.12)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)'}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                 <div>
@@ -196,13 +208,16 @@ export default function Dashboard({ personId }: DashboardProps) {
         <button
           onClick={loadSummary}
           style={{
-            padding: '0.75rem 1.5rem',
+            padding: '0.875rem 2rem',
             backgroundColor: '#007bff',
             color: 'white',
             border: 'none',
-            borderRadius: '4px',
+            borderRadius: '6px',
             cursor: 'pointer',
             fontSize: '1rem',
+            fontWeight: 600,
+            boxShadow: '0 2px 4px rgba(0,123,255,0.2)',
+            transition: 'all 0.2s ease',
           }}
         >
           Aktualisieren

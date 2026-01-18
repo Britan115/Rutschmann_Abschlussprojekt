@@ -115,8 +115,8 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      <h2>IPA-Kriterien</h2>
+    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+      <h2 style={{ marginBottom: '1.5rem', color: '#213547' }}>IPA-Kriterien</h2>
 
       {criteria.map((criterion) => {
         const currentProgress = progress[criterion.id] || {
@@ -130,16 +130,21 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
           <div
             key={criterion.id}
             style={{
-              border: '1px solid #ddd',
+              border: '1px solid #e9ecef',
               borderRadius: '8px',
-              padding: '1.5rem',
+              padding: '2rem',
               marginBottom: '2rem',
+              backgroundColor: '#ffffff',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+              transition: 'box-shadow 0.2s ease',
             }}
+            onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)'}
           >
-            <h3 style={{ marginTop: 0 }}>
+            <h3 style={{ marginTop: 0, marginBottom: '0.5rem', color: '#213547' }}>
               {criterion.id}: {criterion.title}
             </h3>
-            <p style={{ color: '#666', marginBottom: '1rem' }}>{criterion.question}</p>
+            <p style={{ color: '#6c757d', marginBottom: '1.5rem', fontSize: '1rem' }}>{criterion.question}</p>
 
             <div style={{ marginBottom: '1rem' }}>
               <h4>Anforderungen:</h4>
@@ -195,11 +200,16 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
                 rows={3}
                 style={{
                   width: '100%',
-                  padding: '0.5rem',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
+                  padding: '0.75rem',
+                  border: '1px solid #ced4da',
+                  borderRadius: '6px',
                   fontFamily: 'inherit',
+                  fontSize: '1rem',
+                  transition: 'border-color 0.2s ease',
+                  resize: 'vertical',
                 }}
+                onFocus={(e) => e.target.style.borderColor = '#007bff'}
+                onBlur={(e) => e.target.style.borderColor = '#ced4da'}
               />
             </div>
 
@@ -212,12 +222,15 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
               disabled={saving[criterion.id]}
               style={{
                 padding: '0.75rem 1.5rem',
-                backgroundColor: saving[criterion.id] ? '#ccc' : '#007bff',
+                backgroundColor: saving[criterion.id] ? '#6c757d' : '#007bff',
                 color: 'white',
                 border: 'none',
-                borderRadius: '4px',
+                borderRadius: '6px',
                 cursor: saving[criterion.id] ? 'not-allowed' : 'pointer',
                 fontSize: '1rem',
+                fontWeight: 600,
+                transition: 'all 0.2s ease',
+                boxShadow: saving[criterion.id] ? 'none' : '0 2px 4px rgba(0,123,255,0.2)',
               }}
             >
               {saving[criterion.id] ? 'Wird gespeichert...' : 'Fortschritt speichern'}

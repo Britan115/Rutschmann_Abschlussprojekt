@@ -19,19 +19,50 @@ function App() {
 
   return (
     <div className="App">
-      <header style={{ padding: '2rem', textAlign: 'center' }}>
-        <h1>IPA-Kriterien Erfassungsapplikation</h1>
+      <header style={{ 
+        padding: '1.5rem 2rem', 
+        backgroundColor: '#ffffff', 
+        borderBottom: '2px solid #e9ecef',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+        marginBottom: '2rem'
+      }}>
+        <h1 style={{ 
+          margin: 0, 
+          fontSize: '1.75rem', 
+          fontWeight: 600, 
+          color: '#213547' 
+        }}>
+          IPA-Kriterien Erfassungsapplikation
+        </h1>
       </header>
-      <main style={{ padding: '2rem' }}>
+      <main style={{ padding: '0 2rem 2rem' }}>
         {!currentPerson ? (
           <PersonForm onSuccess={handlePersonSaved} />
         ) : (
           <div>
-            <div style={{ marginBottom: '2rem', padding: '1rem', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
-              <strong>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
+            <div style={{ 
+              marginBottom: '2rem', 
+              padding: '1rem 1.5rem', 
+              backgroundColor: '#ffffff', 
+              borderRadius: '8px',
+              border: '1px solid #e9ecef',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+            }}>
+              <strong style={{ color: '#495057' }}>Erfasste Person:</strong>{' '}
+              <span style={{ color: '#007bff', fontWeight: 500 }}>
+                {currentPerson.vorname} {currentPerson.name}
+              </span>
+              {' - '}
+              <span style={{ color: '#6c757d' }}>{currentPerson.thema}</span>
             </div>
 
-            <nav style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <nav style={{ 
+              marginBottom: '2rem', 
+              display: 'flex', 
+              gap: '1rem', 
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}>
               <button
                 onClick={() => setViewMode('criteria')}
                 style={{
@@ -39,9 +70,12 @@ function App() {
                   backgroundColor: viewMode === 'criteria' ? '#007bff' : '#6c757d',
                   color: 'white',
                   border: 'none',
-                  borderRadius: '4px',
+                  borderRadius: '6px',
                   cursor: 'pointer',
                   fontSize: '1rem',
+                  fontWeight: 600,
+                  transition: 'all 0.2s ease',
+                  boxShadow: viewMode === 'criteria' ? '0 4px 8px rgba(0,123,255,0.3)' : '0 2px 4px rgba(0,0,0,0.1)'
                 }}
               >
                 Kriterien bearbeiten
@@ -53,9 +87,12 @@ function App() {
                   backgroundColor: viewMode === 'dashboard' ? '#007bff' : '#6c757d',
                   color: 'white',
                   border: 'none',
-                  borderRadius: '4px',
+                  borderRadius: '6px',
                   cursor: 'pointer',
                   fontSize: '1rem',
+                  fontWeight: 600,
+                  transition: 'all 0.2s ease',
+                  boxShadow: viewMode === 'dashboard' ? '0 4px 8px rgba(0,123,255,0.3)' : '0 2px 4px rgba(0,0,0,0.1)'
                 }}
               >
                 Dashboard
