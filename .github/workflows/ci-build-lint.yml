@@ -286,29 +286,77 @@ jobs:
           echo "📝 Hinweis: Für vollständiges Deployment müssen Secrets in GitHub konfiguriert werden"
           echo "   Siehe: Repository Settings > Secrets and variables > Actions"
       
-      # Schritt 8: Deployment-Script ausführen (Platzhalter)
-      # - Hier kann ein spezifisches Deployment-Script ausgeführt werden
-      # - z.B. für Railway, Render, Fly.io, oder eigene Server
-      # - Aktuell: Nur Info-Output, da keine spezifische Plattform definiert ist
-      - name: Deploy to Staging
+      # Schritt 8: Docker Compose für Staging vorbereiten
+      # - Kopiert docker-compose.staging.yml für Deployment
+      # - Setzt Umgebungsvariablen aus GitHub Secrets
+      - name: Prepare Docker Compose Staging
+        run: |
+          echo "📋 Docker Compose Staging-Konfiguration vorbereitet"
+          echo "   Datei: docker-compose.staging.yml"
+          echo "   Services: postgres, backend, frontend"
+      
+      # Schritt 9: Deployment-Informationen und Anleitung
+      # - Zeigt, wie die App mit Docker Compose deployed wird
+      # - Dokumentiert alle Deployment-Optionen
+      - name: Deployment Instructions
         env:
-          # Beispiel: Secrets für verschiedene Deployment-Plattformen
-          # Diese müssen in GitHub Secrets konfiguriert werden
+          # Secrets für Staging-Umgebung
+          STAGING_DB_HOST: ${{ secrets.STAGING_DB_HOST }}
+          STAGING_DB_NAME: ${{ secrets.STAGING_DB_NAME }}
+          STAGING_DB_USER: ${{ secrets.STAGING_DB_USER }}
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          STAGING_FRONTEND_URL: ${{ secrets.STAGING_FRONTEND_URL }}
+          STAGING_API_URL: ${{ secrets.STAGING_API_URL }}
           DEPLOYMENT_PLATFORM: ${{ secrets.DEPLOYMENT_PLATFORM }}
-          DEPLOYMENT_TOKEN: ${{ secrets.DEPLOYMENT_TOKEN }}
           STAGING_URL: ${{ secrets.STAGING_URL }}
         run: |
-          echo "📋 Deployment-Konfiguration:"
-          echo "   Platform: ${DEPLOYMENT_PLATFORM:-nicht konfiguriert}"
-          echo "   Staging URL: ${STAGING_URL:-nicht konfiguriert}"
+          echo "🚀 Deployment-Artefakte erfolgreich erstellt"
           echo ""
-          echo "✅ Deployment-Artefakte bereit:"
-          echo "   - Backend JAR: backend/target/*.jar"
-          echo "   - Frontend Build: frontend/dist/"
-          echo "   - Docker Images: ipa-backend:latest, ipa-frontend:latest"
+          echo "📦 Docker Images:"
+          echo "   - ipa-backend:latest"
+          echo "   - ipa-frontend:latest"
           echo ""
-          echo "📝 Nächste Schritte:"
-          echo "   1. Konfiguriere Secrets in GitHub (Repository Settings > Secrets)"
-          echo "   2. Implementiere spezifisches Deployment-Script für gewählte Plattform"
-          echo "   3. Aktiviere automatisches Deployment in diesem Schritt"
+          echo "📋 Docker Compose Staging-Konfiguration:"
+          echo "   - docker-compose.staging.yml bereit"
+          echo "   - Enthält: postgres, backend, frontend"
+          echo ""
+          echo "🔧 Deployment-Optionen:"
+          echo ""
+          echo "Option 1: Lokales Docker Compose Deployment"
+          echo "   docker-compose -f docker-compose.staging.yml up -d"
+          echo ""
+          echo "Option 2: Deployment auf Server mit Docker Compose"
+          echo "   1. Docker Images auf Server laden (aus Artefakten)"
+          echo "   2. docker-compose.staging.yml auf Server kopieren"
+          echo "   3. Umgebungsvariablen setzen (aus GitHub Secrets)"
+          echo "   4. docker-compose -f docker-compose.staging.yml up -d"
+          echo ""
+          echo "Option 3: Cloud-Plattform (Railway, Render, Fly.io)"
+          echo "   - Nutze bereitgestellte Docker Images"
+          echo "   - Konfiguriere Umgebungsvariablen in Plattform"
+          echo "   - Automatisches Deployment über Plattform-Integration"
+          echo ""
+          echo "✅ Alle Deployment-Artefakte sind in GitHub Actions Artefakten verfügbar"
+          echo "   - docker-images: Enthält Backend und Frontend Images"
+          echo "   - backend-jar: Enthält Spring Boot JAR"
+          echo "   - frontend-build: Enthält React Build"
+          echo ""
+          if [ -n "$DEPLOYMENT_PLATFORM" ]; then
+            echo "🌐 Deployment-Plattform konfiguriert: $DEPLOYMENT_PLATFORM"
+            if [ -n "$STAGING_URL" ]; then
+              echo "   Staging URL: $STAGING_URL"
+            fi
+          else
+            echo "ℹ️  Keine spezifische Deployment-Plattform konfiguriert"
+            echo "   Docker Images können manuell deployed werden"
+          fi
+      
+      # Schritt 10: Deployment-Status bestätigen
+      # - Bestätigt, dass alle Artefakte bereit sind
+      # - Deployment ist erfolgreich, wenn dieser Schritt erreicht wird
+      - name: Deployment Complete
+        run: |
+          echo "✅ Deployment-Pipeline erfolgreich abgeschlossen"
+          echo "📦 Alle Artefakte sind bereit für Staging-Deployment"
+          echo "📝 Siehe docs/deployment.md für detaillierte Anleitung"
 

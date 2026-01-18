@@ -49,6 +49,37 @@ Die folgenden Secrets müssen in GitHub konfiguriert werden:
 
 ### Option 1: Docker Compose (Lokal/Server)
 
+**Automatisch gebaute Images aus GitHub Actions verwenden:**
+
+1. **Docker Images aus GitHub Actions Artefakten laden:**
+   ```bash
+   # Lade docker-images Artefakt aus GitHub Actions Run
+   # Entpacke die Images:
+   gunzip -c backend-image.tar.gz | docker load
+   gunzip -c frontend-image.tar.gz | docker load
+   ```
+
+2. **Umgebungsvariablen setzen (aus GitHub Secrets):**
+   ```bash
+   export STAGING_DB_NAME=ipa_kriterien_db
+   export STAGING_DB_USER=postgres
+   export STAGING_DB_PASSWORD=<aus_secrets>
+   export STAGING_FRONTEND_URL=http://localhost:80
+   export STAGING_API_URL=http://localhost:8080/api
+   ```
+
+3. **Mit docker-compose starten:**
+   ```bash
+   docker-compose -f docker-compose.staging.yml up -d
+   ```
+
+4. **Status prüfen:**
+   ```bash
+   docker-compose -f docker-compose.staging.yml ps
+   docker-compose -f docker-compose.staging.yml logs -f
+   ```
+
+**Oder: Images lokal bauen:**
 ```bash
 # Docker Images bauen
 docker build -t ipa-backend:latest ./backend
