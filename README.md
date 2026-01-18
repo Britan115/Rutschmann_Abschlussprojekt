@@ -73,7 +73,7 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-15: Automatisierte Tests (abgeschlossen)
 - AP-16: Testergebnis-Protokoll (abgeschlossen)
 - AP-17: Projektdokumentation (abgeschlossen)
-- AP-18: [in Bearbeitung]
+- AP-18: KI-Nutzungsdokumentation (abgeschlossen)
 
 ## Contributing
 
