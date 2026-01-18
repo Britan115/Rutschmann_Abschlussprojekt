@@ -45,15 +45,30 @@ export default function Dashboard({ personId }: DashboardProps) {
   const getQualityLevelColor = (level: number): string => {
     switch (level) {
       case 3:
-        return '#28a745';
+        return '#198754'; // Dunkleres Grün für besseren Kontrast
       case 2:
-        return '#17a2b8';
+        return '#0dcaf0'; // Helleres Türkis für besseren Kontrast
       case 1:
-        return '#ffc107';
+        return '#ffb700'; // Dunkleres Gelb für besseren Kontrast
       case 0:
-        return '#dc3545';
+        return '#dc3545'; // Rot bleibt
       default:
         return '#6c757d';
+    }
+  };
+
+  const getQualityLevelTextColor = (level: number): string => {
+    switch (level) {
+      case 3:
+        return '#ffffff'; // Weiß auf dunklem Grün
+      case 2:
+        return '#000000'; // Schwarz auf hellem Türkis
+      case 1:
+        return '#000000'; // Schwarz auf hellem Gelb
+      case 0:
+        return '#ffffff'; // Weiß auf Rot
+      default:
+        return '#ffffff';
     }
   };
 
@@ -128,6 +143,7 @@ export default function Dashboard({ personId }: DashboardProps) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {summary.criteriaSummaries.map((criterion: CriterionSummary) => {
           const qualityColor = getQualityLevelColor(criterion.qualityLevel);
+          const qualityTextColor = getQualityLevelTextColor(criterion.qualityLevel);
           const progressPercentage = (criterion.fulfilledCount / criterion.totalCount) * 100;
 
           return (
@@ -142,22 +158,22 @@ export default function Dashboard({ personId }: DashboardProps) {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                 <div style={{ flex: 1 }}>
-                  <h4 style={{ marginTop: 0, marginBottom: '0.5rem', color: '#2c3e50', fontSize: '1rem', fontWeight: 600 }}>
+                  <h4 style={{ marginTop: 0, marginBottom: '0.5rem', color: '#212529', fontSize: '1rem', fontWeight: 600 }}>
                     {criterion.criterionId}: {criterion.criterionTitle}
                   </h4>
-                  <div style={{ fontSize: '0.875rem', color: '#6c757d' }}>
+                  <div style={{ fontSize: '0.875rem', color: '#495057' }}>
                     {criterion.fulfilledCount} von {criterion.totalCount} Anforderungen erfüllt
                   </div>
                 </div>
                 <div
                   style={{
                     backgroundColor: qualityColor,
-                    color: 'white',
-                    padding: '0.375rem 0.75rem',
-                    borderRadius: '3px',
-                    fontWeight: 600,
-                    fontSize: '1rem',
-                    minWidth: '2.5rem',
+                    color: qualityTextColor,
+                    padding: '0.5rem 1rem',
+                    borderRadius: '4px',
+                    fontWeight: 700,
+                    fontSize: '1.125rem',
+                    minWidth: '3rem',
                     textAlign: 'center',
                   }}
                 >
@@ -186,7 +202,7 @@ export default function Dashboard({ personId }: DashboardProps) {
                 </div>
               </div>
 
-              <div style={{ fontSize: '0.8125rem', color: '#6c757d' }}>
+              <div style={{ fontSize: '0.8125rem', color: '#495057', fontWeight: 500 }}>
                 {getQualityLevelLabel(criterion.qualityLevel)}
               </div>
             </div>

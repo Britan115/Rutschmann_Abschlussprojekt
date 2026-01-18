@@ -181,10 +181,10 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
               })}
             </div>
 
-            <div style={{ marginBottom: '1rem' }}>
+            <div style={{ marginBottom: '1.25rem' }}>
               <label
                 htmlFor={`notes-${criterion.id}`}
-                style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}
+                style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}
               >
                 Notizen:
               </label>

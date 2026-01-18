@@ -95,8 +95,8 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
         Personendaten erfassen
       </h2>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label htmlFor="name" style={{ display: 'block', marginBottom: '0.5rem' }}>
+      <div style={{ marginBottom: '1.25rem' }}>
+        <label htmlFor="name" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}>
           Name *
         </label>
         <input
@@ -105,6 +105,7 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           name="name"
           value={formData.name}
           onChange={handleChange}
+          placeholder="z.B. Muster"
           style={{
             width: '100%',
             border: errors.name ? '1px solid #dc3545' : '1px solid #ced4da',
@@ -113,8 +114,8 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
         {errors.name && <span style={{ color: '#dc3545', fontSize: '0.8125rem', marginTop: '0.25rem', display: 'block' }}>{errors.name}</span>}
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label htmlFor="vorname" style={{ display: 'block', marginBottom: '0.5rem' }}>
+      <div style={{ marginBottom: '1.25rem' }}>
+        <label htmlFor="vorname" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}>
           Vorname *
         </label>
         <input
@@ -123,6 +124,7 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           name="vorname"
           value={formData.vorname}
           onChange={handleChange}
+          placeholder="z.B. Max"
           style={{
             width: '100%',
             border: errors.vorname ? '1px solid #dc3545' : '1px solid #ced4da',
@@ -133,8 +135,8 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
         )}
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label htmlFor="thema" style={{ display: 'block', marginBottom: '0.5rem' }}>
+      <div style={{ marginBottom: '1.25rem' }}>
+        <label htmlFor="thema" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}>
           Thema der Arbeit *
         </label>
         <input
@@ -143,6 +145,7 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
           name="thema"
           value={formData.thema}
           onChange={handleChange}
+          placeholder="z.B. Entwicklung einer Webapplikation"
           style={{
             width: '100%',
             border: errors.thema ? '1px solid #dc3545' : '1px solid #ced4da',
@@ -153,8 +156,8 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
         )}
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label htmlFor="abgabedatum" style={{ display: 'block', marginBottom: '0.5rem' }}>
+      <div style={{ marginBottom: '1.25rem' }}>
+        <label htmlFor="abgabedatum" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#212529', fontSize: '1rem' }}>
           Abgabedatum *
         </label>
         <input

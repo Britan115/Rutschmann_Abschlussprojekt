@@ -46,8 +46,8 @@ function App() {
               borderRadius: '4px',
               border: '1px solid #dee2e6'
             }}>
-              <span style={{ color: '#495057', fontSize: '0.9375rem' }}>
-                <strong>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
+              <span style={{ color: '#212529', fontSize: '1rem', fontWeight: 500 }}>
+                <strong style={{ fontWeight: 600 }}>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
               </span>
             </div>
 
@@ -62,7 +62,7 @@ function App() {
               <button
                 onClick={() => setViewMode('criteria')}
                 style={{
-                  backgroundColor: viewMode === 'criteria' ? '#495057' : '#6c757d',
+                  backgroundColor: viewMode === 'criteria' ? '#0056b3' : '#6c757d',
                 }}
               >
                 Kriterien bearbeiten
@@ -70,7 +70,7 @@ function App() {
               <button
                 onClick={() => setViewMode('dashboard')}
                 style={{
-                  backgroundColor: viewMode === 'dashboard' ? '#495057' : '#6c757d',
+                  backgroundColor: viewMode === 'dashboard' ? '#0056b3' : '#6c757d',
                 }}
               >
                 Dashboard
