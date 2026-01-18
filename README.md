@@ -52,7 +52,7 @@ Webapplikation zur Erfassung und Bewertung von IPA-Kriterien gemäss QV BiVo 202
 ## Dokumentation
 
 Detaillierte Dokumentation im `/docs` Verzeichnis:
-- `architektur.md`, `criteria.md`, `testkonzept.md`, `testfaelle.md`, `testprotokoll.md`, `pipeline.md`, `ki-nutzung.md`
+- `architektur.md`, `testkonzept.md`, `testfaelle.md`, `testprotokoll.md`, `deployment.md`, `ki-nutzung.md`, **`bewertungskriterien.md`** (Nachweis aller Kriterien)
 
 ## Arbeitspakete
 

@@ -185,8 +185,8 @@ class SummaryServiceTest {
     }
 
     @Test
-    void testCalculateSummary_QualityLevel3_CalculatesGrade5_5() throws Exception {
-        // TC-UNIT-006: Notenberechnung Gütestufe 3 → Note 5.5
+    void testCalculateSummary_QualityLevel3_CalculatesGrade6_0() throws Exception {
+        // TC-UNIT-006: Notenberechnung Gütestufe 3 → Note 6.0
         CriteriaResponse criteriaResponse = new CriteriaResponse();
         criteriaResponse.setCriteria(Arrays.asList(testCriterion));
 
@@ -204,13 +204,13 @@ class SummaryServiceTest {
 
         assertNotNull(response);
         assertNotNull(response.getEstimatedGradePart1());
-        // Gütestufe 3 → Note = 4.0 + (3.0 * 0.5) = 5.5
-        assertEquals(5.5, response.getEstimatedGradePart1(), 0.01);
+        // Gütestufe 3 → Note = 3.0 + (3.0 * 1.0) = 6.0
+        assertEquals(6.0, response.getEstimatedGradePart1(), 0.01);
     }
 
     @Test
-    void testCalculateSummary_QualityLevel0_CalculatesGrade4_0() throws Exception {
-        // TC-UNIT-007: Notenberechnung Gütestufe 0 → Note 4.0
+    void testCalculateSummary_QualityLevel0_CalculatesGrade3_0() throws Exception {
+        // TC-UNIT-007: Notenberechnung Gütestufe 0 → Note 3.0
         CriteriaResponse criteriaResponse = new CriteriaResponse();
         criteriaResponse.setCriteria(Arrays.asList(testCriterion));
 
@@ -228,7 +228,7 @@ class SummaryServiceTest {
 
         assertNotNull(response);
         assertNotNull(response.getEstimatedGradePart1());
-        // Gütestufe 0 → Note = 4.0 + (0.0 * 0.5) = 4.0
-        assertEquals(4.0, response.getEstimatedGradePart1(), 0.01);
+        // Gütestufe 0 → Note = 1.0 + (0.0 * 5/3) = 1.0
+        assertEquals(1.0, response.getEstimatedGradePart1(), 0.01);
     }
 }

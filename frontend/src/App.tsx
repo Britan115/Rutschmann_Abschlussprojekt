@@ -19,29 +19,54 @@ function App() {
 
   return (
     <div className="App">
-      <header style={{ padding: '2rem', textAlign: 'center' }}>
-        <h1>IPA-Kriterien Erfassungsapplikation</h1>
+      <header style={{ 
+        padding: '1.25rem 2rem', 
+        backgroundColor: '#ffffff', 
+        borderBottom: '1px solid #e5e7eb',
+        marginBottom: '2rem',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+      }}>
+        <h1 style={{ 
+          margin: 0, 
+          fontSize: '1.5rem', 
+          fontWeight: 700, 
+          color: '#1a1a1a' 
+        }}>
+          IPA-Kriterien Erfassungsapplikation
+        </h1>
       </header>
-      <main style={{ padding: '2rem' }}>
+      <main style={{ padding: '0 2rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
         {!currentPerson ? (
           <PersonForm onSuccess={handlePersonSaved} />
         ) : (
           <div>
-            <div style={{ marginBottom: '2rem', padding: '1rem', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
-              <strong>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
+            <div style={{ 
+              marginBottom: '1.5rem', 
+              padding: '1rem 1.5rem', 
+              backgroundColor: '#ffffff', 
+              borderRadius: '8px',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+            }}>
+              <span style={{ color: '#1a1a1a', fontSize: '1rem', fontWeight: 500 }}>
+                <strong style={{ fontWeight: 700 }}>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
+              </span>
             </div>
 
-            <nav style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <nav style={{ 
+              marginBottom: '2rem', 
+              display: 'flex', 
+              gap: '1.5rem', 
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}>
               <button
                 onClick={() => setViewMode('criteria')}
                 style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: viewMode === 'criteria' ? '#007bff' : '#6c757d',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
+                  backgroundColor: viewMode === 'criteria' ? '#2563eb' : '#6b7280',
+                  padding: '18px 40px',
+                  fontSize: '1.125rem',
+                  minHeight: '60px',
                 }}
               >
                 Kriterien bearbeiten
@@ -49,16 +74,13 @@ function App() {
               <button
                 onClick={() => setViewMode('dashboard')}
                 style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: viewMode === 'dashboard' ? '#007bff' : '#6c757d',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
+                  backgroundColor: viewMode === 'dashboard' ? '#2563eb' : '#6b7280',
+                  padding: '18px 40px',
+                  fontSize: '1.125rem',
+                  minHeight: '60px',
                 }}
               >
-                Dashboard
+                Dashboard anzeigen
               </button>
             </nav>
 
@@ -72,4 +94,3 @@ function App() {
 }
 
 export default App;
-

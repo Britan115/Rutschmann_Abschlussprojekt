@@ -45,15 +45,15 @@ export default function Dashboard({ personId }: DashboardProps) {
   const getQualityLevelColor = (level: number): string => {
     switch (level) {
       case 3:
-        return '#28a745';
+        return '#16a34a'; // Grün
       case 2:
-        return '#17a2b8';
+        return '#2563eb'; // Blau
       case 1:
-        return '#ffc107';
+        return '#ca8a04'; // Dunkleres Gelb/Gold
       case 0:
-        return '#dc3545';
+        return '#dc2626'; // Rot
       default:
-        return '#6c757d';
+        return '#6b7280';
     }
   };
 
@@ -65,65 +65,97 @@ export default function Dashboard({ personId }: DashboardProps) {
   };
 
   if (loading) {
-    return <div>Lade Dashboard...</div>;
+    return <div style={{ padding: '2rem', color: '#1a1a1a', fontSize: '1.125rem' }}>Lade Dashboard...</div>;
   }
 
   if (error) {
-    return <div style={{ color: 'red' }}>{error}</div>;
+    return <div style={{ padding: '2rem', color: '#dc2626', fontSize: '1.125rem', fontWeight: 600 }}>{error}</div>;
   }
 
   if (!summary) {
-    return <div>Keine Daten verfügbar</div>;
+    return <div style={{ padding: '2rem', color: '#1a1a1a', fontSize: '1.125rem' }}>Keine Daten verfügbar</div>;
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
-      <h2>Dashboard - Übersicht</h2>
+    <div>
+      <h2 style={{ marginBottom: '1.5rem', color: '#1a1a1a', fontSize: '1.5rem', fontWeight: 700 }}>
+        Dashboard - Übersicht
+      </h2>
 
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '1.5rem',
-          marginBottom: '2rem',
+          marginBottom: '2.5rem',
         }}
       >
         <div
           style={{
-            border: '2px solid #007bff',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            backgroundColor: '#f8f9fa',
+            borderRadius: '12px',
+            padding: '2rem',
+            backgroundColor: '#ffffff',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #e5e7eb',
           }}
         >
-          <h3 style={{ marginTop: 0, color: '#007bff' }}>Teil 1</h3>
-          <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#007bff' }}>
+          <h3 style={{ 
+            marginTop: 0, 
+            marginBottom: '1rem', 
+            color: '#1a1a1a', 
+            fontSize: '1.125rem', 
+            fontWeight: 600 
+          }}>
+            Teil 1
+          </h3>
+          <div style={{ 
+            fontSize: '2.5rem', 
+            fontWeight: 700, 
+            color: '#2563eb', 
+            marginBottom: '0.5rem' 
+          }}>
             {formatGrade(summary.estimatedGradePart1)}
           </div>
-          <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
+          <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
             Mutmassliche Note
           </div>
         </div>
 
         <div
           style={{
-            border: '2px solid #28a745',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            backgroundColor: '#f8f9fa',
+            borderRadius: '12px',
+            padding: '2rem',
+            backgroundColor: '#ffffff',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #e5e7eb',
           }}
         >
-          <h3 style={{ marginTop: 0, color: '#28a745' }}>Teil 2</h3>
-          <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#28a745' }}>
+          <h3 style={{ 
+            marginTop: 0, 
+            marginBottom: '1rem', 
+            color: '#1a1a1a', 
+            fontSize: '1.125rem', 
+            fontWeight: 600 
+          }}>
+            Teil 2
+          </h3>
+          <div style={{ 
+            fontSize: '2.5rem', 
+            fontWeight: 700, 
+            color: '#16a34a', 
+            marginBottom: '0.5rem' 
+          }}>
             {formatGrade(summary.estimatedGradePart2)}
           </div>
-          <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
+          <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
             Mutmassliche Note
           </div>
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '1rem' }}>Gütestufen pro Kriterium</h3>
+      <h3 style={{ marginBottom: '1.25rem', color: '#1a1a1a', fontSize: '1.25rem', fontWeight: 700 }}>
+        Gütestufen pro Kriterium
+      </h3>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {summary.criteriaSummaries.map((criterion: CriterionSummary) => {
@@ -134,41 +166,51 @@ export default function Dashboard({ personId }: DashboardProps) {
             <div
               key={criterion.criterionId}
               style={{
-                border: `2px solid ${qualityColor}`,
-                borderRadius: '8px',
+                borderRadius: '12px',
                 padding: '1.5rem',
-                backgroundColor: '#fff',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <div>
-                  <h4 style={{ marginTop: 0, marginBottom: '0.5rem' }}>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ 
+                    marginTop: 0, 
+                    marginBottom: '0.5rem', 
+                    color: '#1a1a1a', 
+                    fontSize: '1.125rem', 
+                    fontWeight: 600 
+                  }}>
                     {criterion.criterionId}: {criterion.criterionTitle}
                   </h4>
-                  <div style={{ fontSize: '0.9rem', color: '#666' }}>
+                  <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
                     {criterion.fulfilledCount} von {criterion.totalCount} Anforderungen erfüllt
                   </div>
                 </div>
                 <div
                   style={{
                     backgroundColor: qualityColor,
-                    color: 'white',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '4px',
-                    fontWeight: 'bold',
-                    fontSize: '1.2rem',
+                    color: '#ffffff',
+                    padding: '0.75rem 1.25rem',
+                    borderRadius: '8px',
+                    fontWeight: 700,
+                    fontSize: '1.25rem',
+                    minWidth: '3.5rem',
+                    textAlign: 'center',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                   }}
                 >
                   {criterion.qualityLevel}
                 </div>
               </div>
 
-              <div style={{ marginBottom: '0.5rem' }}>
+              <div style={{ marginBottom: '1rem' }}>
                 <div
                   style={{
                     width: '100%',
                     height: '8px',
-                    backgroundColor: '#e9ecef',
+                    backgroundColor: '#e5e7eb',
                     borderRadius: '4px',
                     overflow: 'hidden',
                   }}
@@ -184,7 +226,7 @@ export default function Dashboard({ personId }: DashboardProps) {
                 </div>
               </div>
 
-              <div style={{ fontSize: '0.875rem', color: '#666' }}>
+              <div style={{ fontSize: '0.9375rem', color: '#4b5563', fontWeight: 500 }}>
                 {getQualityLevelLabel(criterion.qualityLevel)}
               </div>
             </div>
@@ -193,22 +235,10 @@ export default function Dashboard({ personId }: DashboardProps) {
       </div>
 
       <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-        <button
-          onClick={loadSummary}
-          style={{
-            padding: '0.75rem 1.5rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '1rem',
-          }}
-        >
-          Aktualisieren
+        <button onClick={loadSummary}>
+          Daten aktualisieren
         </button>
       </div>
     </div>
   );
 }
-
