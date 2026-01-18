@@ -228,7 +228,7 @@ class SummaryServiceTest {
 
         assertNotNull(response);
         assertNotNull(response.getEstimatedGradePart1());
-        // Gütestufe 0 → Note = 3.0 + (0.0 * 1.0) = 3.0
-        assertEquals(3.0, response.getEstimatedGradePart1(), 0.01);
+        // Gütestufe 0 → Note = 1.0 + (0.0 * 5/3) = 1.0
+        assertEquals(1.0, response.getEstimatedGradePart1(), 0.01);
     }
 }

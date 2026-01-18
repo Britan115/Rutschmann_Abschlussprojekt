@@ -625,7 +625,7 @@ Die mutmassliche Note wird pro Teil (Teil 1 oder Teil 2) berechnet. Die Note gib
 **Formel:**
 
 ```
-Note = 3.0 + (Durchschnitt_Gütestufen * 1.0)
+Note = 1.0 + (Durchschnitt_Gütestufen * 5/3)
 ```
 
 **Berechnungsschritte:**
@@ -643,8 +643,8 @@ Note = 3.0 + (Durchschnitt_Gütestufen * 1.0)
 
 3. **Note berechnen:**
    ```
-   Note_Teil1 = 3.0 + (Durchschnitt_Teil1 * 1.0)
-   Note_Teil2 = 3.0 + (Durchschnitt_Teil2 * 1.0)
+   Note_Teil1 = 1.0 + (Durchschnitt_Teil1 * 5/3)
+   Note_Teil2 = 1.0 + (Durchschnitt_Teil2 * 5/3)
    ```
 
 **Notenskala:**
@@ -652,41 +652,41 @@ Note = 3.0 + (Durchschnitt_Gütestufen * 1.0)
 | Durchschnitt Gütestufen | Note | Interpretation |
 |-------------------------|------|----------------|
 | 3.0 | 6.0 | Sehr gut |
-| 2.5 | 5.5 | Gut |
-| 2.0 | 5.0 | Gut |
-| 1.5 | 4.5 | Genügend |
-| 1.0 | 4.0 | Genügend |
-| 0.5 | 3.5 | Ungenügend |
-| 0.0 | 3.0 | Ungenügend |
+| 2.5 | 5.17 | Gut |
+| 2.0 | 4.33 | Genügend |
+| 1.5 | 3.5 | Ungenügend |
+| 1.0 | 2.67 | Ungenügend |
+| 0.5 | 1.83 | Ungenügend |
+| 0.0 | 1.0 | Ungenügend |
 
 **Detaillierte Beispiele:**
 
 **Beispiel 1: Alle Kriterien mit Gütestufe 3**
 - Teil 1: A04 (Gütestufe 3), Doc03 (Gütestufe 3)
 - Durchschnitt Teil 1: (3 + 3) / 2 = 3.0
-- Note Teil 1: 3.0 + (3.0 * 1.0) = 6.0
+- Note Teil 1: 1.0 + (3.0 * 5/3) = 6.0
 
 - Teil 2: H06 (Gütestufe 3)
 - Durchschnitt Teil 2: 3.0 / 1 = 3.0
-- Note Teil 2: 3.0 + (3.0 * 1.0) = 6.0
+- Note Teil 2: 1.0 + (3.0 * 5/3) = 6.0
 
 **Beispiel 2: Gemischte Gütestufen**
 - Teil 1: A04 (Gütestufe 3), Doc03 (Gütestufe 1)
 - Durchschnitt Teil 1: (3 + 1) / 2 = 2.0
-- Note Teil 1: 3.0 + (2.0 * 1.0) = 5.0
+- Note Teil 1: 1.0 + (2.0 * 5/3) = 4.33
 
 - Teil 2: H06 (Gütestufe 2)
 - Durchschnitt Teil 2: 2.0 / 1 = 2.0
-- Note Teil 2: 3.0 + (2.0 * 1.0) = 5.0
+- Note Teil 2: 1.0 + (2.0 * 5/3) = 4.33
 
 **Beispiel 3: Schlechte Leistung**
 - Teil 1: A04 (Gütestufe 0), Doc03 (Gütestufe 1)
 - Durchschnitt Teil 1: (0 + 1) / 2 = 0.5
-- Note Teil 1: 3.0 + (0.5 * 1.0) = 3.5
+- Note Teil 1: 1.0 + (0.5 * 5/3) = 1.83
 
 - Teil 2: H06 (Gütestufe 0)
 - Durchschnitt Teil 2: 0.0 / 1 = 0.0
-- Note Teil 2: 3.0 + (0.0 * 1.0) = 3.0
+- Note Teil 2: 1.0 + (0.0 * 5/3) = 1.0
 
 **Implementierung:** `SummaryService.calculateSummary(Long personId)`
 
@@ -713,10 +713,10 @@ for (Criteria criterion : allCriteria) {
 
 // Berechne Noten
 Double estimatedGradePart1 = countPart1 > 0 
-    ? 3.0 + (sumPart1 / countPart1) * 1.0 
+    ? 1.0 + (sumPart1 / countPart1) * (5.0 / 3.0) 
     : null;
 Double estimatedGradePart2 = countPart2 > 0 
-    ? 3.0 + (sumPart2 / countPart2) * 1.0 
+    ? 1.0 + (sumPart2 / countPart2) * (5.0 / 3.0) 
     : null;
 ```
 
