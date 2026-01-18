@@ -93,6 +93,16 @@ jobs:
       - name: Maven Package
         working-directory: ./backend
         run: mvn package -DskipTests
+      
+      # Schritt 7: Backend JAR speichern
+      # - Speichert JAR-Artefakt für Deployment
+      # - Wird vom Deployment-Job verwendet
+      - name: Upload Backend JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: backend/target/*.jar
+          retention-days: 1
 
   # ========================================================================
   # Job 2: Frontend Build, Test & Lint
@@ -181,4 +191,124 @@ jobs:
       - name: Frontend Build
         working-directory: ./frontend
         run: npm run build
+      
+      # Schritt 9: Frontend Build-Artefakte speichern
+      # - Speichert Build-Artefakte für Deployment
+      # - Wird vom Deployment-Job verwendet
+      - name: Upload Frontend Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/dist/
+          retention-days: 1
+
+  # ========================================================================
+  # Job 3: Staging Deployment
+  # ========================================================================
+  # - Wird nur ausgeführt, wenn Build & Tests erfolgreich waren
+  # - Läuft nur auf main-Branch (nicht auf Feature-Branches)
+  # - Baut Docker Images für Backend und Frontend
+  # - Nutzt Secrets für sensible Daten (Datenbank-Credentials, etc.)
+  # - Deployed automatisch nach erfolgreichem Pipeline-Durchlauf
+  # ========================================================================
+  staging-deployment:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    # Nur auf main-Branch nach erfolgreichem Build & Test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [backend-build-test, frontend-build-test-lint]
+    
+    steps:
+      # Schritt 1: Repository-Code auschecken
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      # Schritt 2: Backend JAR herunterladen
+      # - Lädt das gebaute JAR aus dem Build-Job
+      - name: Download Backend JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-jar
+          path: backend/target/
+      
+      # Schritt 3: Frontend Build herunterladen
+      # - Lädt das gebaute Frontend aus dem Build-Job
+      - name: Download Frontend Build
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/dist/
+      
+      # Schritt 4: Docker Images bauen
+      # - Baut Backend Docker Image
+      # - Baut Frontend Docker Image
+      # - Tagged mit Git SHA für Versionierung
+      - name: Build Docker Images
+        run: |
+          docker build -t ipa-backend:${{ github.sha }} -t ipa-backend:latest ./backend
+          docker build -t ipa-frontend:${{ github.sha }} -t ipa-frontend:latest ./frontend
+      
+      # Schritt 5: Docker Images speichern (optional)
+      # - Speichert Images als Artefakte für späteres Deployment
+      # - Kann für manuelles Deployment verwendet werden
+      - name: Save Docker Images
+        run: |
+          docker save ipa-backend:latest | gzip > backend-image.tar.gz
+          docker save ipa-frontend:latest | gzip > frontend-image.tar.gz
+      
+      # Schritt 6: Docker Images hochladen (optional)
+      # - Macht Images für manuelles Deployment verfügbar
+      - name: Upload Docker Images
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-images
+          path: |
+            backend-image.tar.gz
+            frontend-image.tar.gz
+          retention-days: 7
+      
+      # Schritt 7: Deployment-Informationen ausgeben
+      # - Zeigt Deployment-Status und verwendete Secrets
+      # - WICHTIG: Secrets werden nie im Log ausgegeben (GitHub verhindert das automatisch)
+      - name: Deployment Info
+        env:
+          # Secrets werden über GitHub Secrets konfiguriert
+          # Diese Variablen sind nur im Workflow verfügbar, nicht im Code
+          STAGING_DB_HOST: ${{ secrets.STAGING_DB_HOST }}
+          STAGING_DB_NAME: ${{ secrets.STAGING_DB_NAME }}
+          STAGING_DB_USER: ${{ secrets.STAGING_DB_USER }}
+          # STAGING_DB_PASSWORD wird nicht ausgegeben (Sicherheit)
+        run: |
+          echo "🚀 Deployment gestartet für Commit: ${{ github.sha }}"
+          echo "📦 Backend Image: ipa-backend:${{ github.sha }}"
+          echo "📦 Frontend Image: ipa-frontend:${{ github.sha }}"
+          echo "✅ Docker Images erfolgreich gebaut"
+          echo "📝 Hinweis: Für vollständiges Deployment müssen Secrets in GitHub konfiguriert werden"
+          echo "   Siehe: Repository Settings > Secrets and variables > Actions"
+      
+      # Schritt 8: Deployment-Script ausführen (Platzhalter)
+      # - Hier kann ein spezifisches Deployment-Script ausgeführt werden
+      # - z.B. für Railway, Render, Fly.io, oder eigene Server
+      # - Aktuell: Nur Info-Output, da keine spezifische Plattform definiert ist
+      - name: Deploy to Staging
+        env:
+          # Beispiel: Secrets für verschiedene Deployment-Plattformen
+          # Diese müssen in GitHub Secrets konfiguriert werden
+          DEPLOYMENT_PLATFORM: ${{ secrets.DEPLOYMENT_PLATFORM }}
+          DEPLOYMENT_TOKEN: ${{ secrets.DEPLOYMENT_TOKEN }}
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          echo "📋 Deployment-Konfiguration:"
+          echo "   Platform: ${DEPLOYMENT_PLATFORM:-nicht konfiguriert}"
+          echo "   Staging URL: ${STAGING_URL:-nicht konfiguriert}"
+          echo ""
+          echo "✅ Deployment-Artefakte bereit:"
+          echo "   - Backend JAR: backend/target/*.jar"
+          echo "   - Frontend Build: frontend/dist/"
+          echo "   - Docker Images: ipa-backend:latest, ipa-frontend:latest"
+          echo ""
+          echo "📝 Nächste Schritte:"
+          echo "   1. Konfiguriere Secrets in GitHub (Repository Settings > Secrets)"
+          echo "   2. Implementiere spezifisches Deployment-Script für gewählte Plattform"
+          echo "   3. Aktiviere automatisches Deployment in diesem Schritt"
 
