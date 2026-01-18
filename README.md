@@ -67,7 +67,8 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-09: Frontend Dashboard (abgeschlossen)
 - AP-10: CI Pipeline Build & Lint (abgeschlossen)
 - AP-11: Testintegration (abgeschlossen)
-- AP-12 bis AP-18: [in Bearbeitung]
+- AP-12: Staging Deployment & Secrets (abgeschlossen)
+- AP-13 bis AP-18: [in Bearbeitung]
 
 ## Contributing
 
