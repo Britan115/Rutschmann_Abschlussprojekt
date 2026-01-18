@@ -70,7 +70,8 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-12: Staging Deployment & Secrets (abgeschlossen)
 - AP-13: Testkonzept (abgeschlossen)
 - AP-14: Testfalldokumentation (abgeschlossen)
-- AP-15 bis AP-18: [in Bearbeitung]
+- AP-15: Automatisierte Tests (abgeschlossen)
+- AP-16 bis AP-18: [in Bearbeitung]
 
 ## Contributing
 
