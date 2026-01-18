@@ -76,9 +76,10 @@ public class SummaryService {
 
         // Berechnung der mutmasslichen Note
         // Formel: Durchschnitt der Gütestufen pro Teil, dann in Note umrechnen
-        // Note = 4.0 + (Durchschnitt * 0.5) -> Gütestufe 3 = Note 5.5, Gütestufe 0 = Note 4.0
-        Double estimatedGradePart1 = countPart1 > 0 ? 4.0 + (sumPart1 / countPart1) * 0.5 : null;
-        Double estimatedGradePart2 = countPart2 > 0 ? 4.0 + (sumPart2 / countPart2) * 0.5 : null;
+        // Note = 3.0 + (Durchschnitt * 1.0) -> Gütestufe 3 = Note 6.0, Gütestufe 0 = Note 3.0
+        // Notenskala: 3.0 (ungenügend) bis 6.0 (sehr gut), 4.0 = genügend
+        Double estimatedGradePart1 = countPart1 > 0 ? 3.0 + (sumPart1 / countPart1) * 1.0 : null;
+        Double estimatedGradePart2 = countPart2 > 0 ? 3.0 + (sumPart2 / countPart2) * 1.0 : null;
 
         return new SummaryResponse(summaries, estimatedGradePart1, estimatedGradePart2);
     }
