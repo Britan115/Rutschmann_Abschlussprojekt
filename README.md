@@ -68,7 +68,8 @@ Detaillierte Dokumentation im `/docs` Verzeichnis:
 - AP-10: CI Pipeline Build & Lint (abgeschlossen)
 - AP-11: Testintegration (abgeschlossen)
 - AP-12: Staging Deployment & Secrets (abgeschlossen)
-- AP-13 bis AP-18: [in Bearbeitung]
+- AP-13: Testkonzept (abgeschlossen)
+- AP-14 bis AP-18: [in Bearbeitung]
 
 ## Contributing
 
