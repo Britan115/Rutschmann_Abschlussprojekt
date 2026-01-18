@@ -304,12 +304,23 @@ ch.bbw.ipa
 
 ### 4.3 REST API Endpoints
 
+Vollständige Dokumentation aller REST API Endpoints mit Request/Response-Beispielen, Status-Codes und Fehlerbehandlung.
+
 #### GET `/api/criteria`
+
 Lädt alle Kriterien aus `criteria.json`.
 
-**Request:** Keine Parameter
+**HTTP-Methode:** GET  
+**URL:** `/api/criteria`  
+**Authentifizierung:** Keine (MVP)
+
+**Request:**
+- Keine Query-Parameter
+- Kein Request-Body
 
 **Response:**
+
+**Status 200 OK:**
 ```json
 {
   "criteria": [
@@ -317,17 +328,66 @@ Lädt alle Kriterien aus `criteria.json`.
       "id": "A04",
       "title": "Zeitplan",
       "question": "Was sind die Anforderungen an den Zeitplan?",
-      "requirements": [...],
-      "qualityLevels": {...}
+      "requirements": [
+        {
+          "id": "A04-1",
+          "description": "Der Zeitplan ist Bestandteil von Teil 1 des IPA-Berichts.",
+          "module": "BF",
+          "part": 1
+        },
+        {
+          "id": "A04-2",
+          "description": "Der Zeitplan ist übersichtlich gestaltet.",
+          "module": "BF",
+          "part": 1
+        }
+      ],
+      "qualityLevels": {
+        "level0": "Weniger als 2 Anforderungen erfüllt",
+        "level1": "2-3 Anforderungen erfüllt",
+        "level2": "4-5 Anforderungen erfüllt",
+        "level3": "Alle Anforderungen erfüllt"
+      }
+    },
+    {
+      "id": "H06",
+      "title": "Automatisierung des Auslieferungsprozesses",
+      ...
+    },
+    {
+      "id": "Doc03",
+      "title": "Formale Anforderungen an den IPA-Bericht",
+      ...
     }
   ]
 }
 ```
 
+**Status 500 Internal Server Error:**
+- Tritt auf, wenn `criteria.json` nicht geladen werden kann
+- Response: Leerer Body
+
+**Beispiel-Request (cURL):**
+```bash
+curl -X GET http://localhost:8080/api/criteria \
+  -H "Content-Type: application/json"
+```
+
+---
+
 #### POST `/api/person`
-Erstellt eine neue Person.
+
+Erstellt eine neue Person in der Datenbank.
+
+**HTTP-Methode:** POST  
+**URL:** `/api/person`  
+**Authentifizierung:** Keine (MVP)
 
 **Request:**
+
+**Content-Type:** `application/json`
+
+**Body:**
 ```json
 {
   "name": "Muster",
@@ -337,7 +397,15 @@ Erstellt eine neue Person.
 }
 ```
 
-**Response:** Status 201 Created
+**Validierung:**
+- `name`: Pflichtfeld, nicht leer
+- `vorname`: Pflichtfeld, nicht leer
+- `thema`: Pflichtfeld, nicht leer
+- `abgabedatum`: Pflichtfeld, Format: YYYY-MM-DD
+
+**Response:**
+
+**Status 201 Created:**
 ```json
 {
   "id": 1,
@@ -347,35 +415,110 @@ Erstellt eine neue Person.
   "abgabedatum": "2024-12-31"
 }
 ```
+
+**Status 500 Internal Server Error:**
+- Tritt auf bei Datenbankfehlern
+- Response: Leerer Body
+
+**Beispiel-Request (cURL):**
+```bash
+curl -X POST http://localhost:8080/api/person \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Muster",
+    "vorname": "Max",
+    "thema": "IPA-Kriterien-App",
+    "abgabedatum": "2024-12-31"
+  }'
+```
+
+---
 
 #### PUT `/api/person/{id}/criteria/{criterionId}`
-Speichert/aktualisiert den Fortschritt für ein Kriterium.
+
+Speichert oder aktualisiert den Fortschritt für ein spezifisches Kriterium einer Person.
+
+**HTTP-Methode:** PUT  
+**URL:** `/api/person/{id}/criteria/{criterionId}`  
+**Path-Parameter:**
+- `id` (Long): ID der Person
+- `criterionId` (String): ID des Kriteriums (z.B. "A04", "H06", "Doc03")
+
+**Authentifizierung:** Keine (MVP)
 
 **Request:**
+
+**Content-Type:** `application/json`
+
+**Body:**
 ```json
 {
   "fulfilledRequirements": ["A04-1", "A04-2", "A04-3"],
-  "notes": "Zeitplan ist erstellt"
+  "notes": "Zeitplan ist erstellt und dokumentiert"
 }
 ```
 
-**Response:** Status 200 OK
+**Validierung:**
+- `fulfilledRequirements`: Array von Requirement-IDs (kann leer sein)
+- `notes`: Optional, max. 1000 Zeichen
+
+**Response:**
+
+**Status 200 OK:**
 ```json
 {
   "id": 1,
-  "person": {...},
+  "person": {
+    "id": 1,
+    "name": "Muster",
+    "vorname": "Max",
+    "thema": "IPA-Kriterien-App",
+    "abgabedatum": "2024-12-31"
+  },
   "criterionId": "A04",
   "fulfilledRequirements": ["A04-1", "A04-2", "A04-3"],
-  "notes": "Zeitplan ist erstellt"
+  "notes": "Zeitplan ist erstellt und dokumentiert"
 }
 ```
 
+**Status 404 Not Found:**
+- Tritt auf, wenn Person mit gegebener ID nicht existiert
+- Response: Leerer Body
+
+**Status 500 Internal Server Error:**
+- Tritt auf bei Datenbankfehlern
+- Response: Leerer Body
+
+**Beispiel-Request (cURL):**
+```bash
+curl -X PUT http://localhost:8080/api/person/1/criteria/A04 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fulfilledRequirements": ["A04-1", "A04-2", "A04-3"],
+    "notes": "Zeitplan ist erstellt"
+  }'
+```
+
+---
+
 #### GET `/api/person/{id}/summary`
-Berechnet und liefert die Summary (Gütestufen und Noten).
 
-**Request:** Keine Body-Parameter
+Berechnet und liefert die Zusammenfassung (Summary) mit Gütestufen pro Kriterium und mutmasslichen Noten für Teil 1 und Teil 2.
 
-**Response:** Status 200 OK
+**HTTP-Methode:** GET  
+**URL:** `/api/person/{id}/summary`  
+**Path-Parameter:**
+- `id` (Long): ID der Person
+
+**Authentifizierung:** Keine (MVP)
+
+**Request:**
+- Keine Query-Parameter
+- Kein Request-Body
+
+**Response:**
+
+**Status 200 OK:**
 ```json
 {
   "criteriaSummaries": [
@@ -385,6 +528,20 @@ Berechnet und liefert die Summary (Gütestufen und Noten).
       "fulfilledCount": 6,
       "totalCount": 6,
       "qualityLevel": 3
+    },
+    {
+      "criterionId": "H06",
+      "criterionTitle": "Automatisierung des Auslieferungsprozesses",
+      "fulfilledCount": 4,
+      "totalCount": 6,
+      "qualityLevel": 2
+    },
+    {
+      "criterionId": "Doc03",
+      "criterionTitle": "Formale Anforderungen an den IPA-Bericht",
+      "fulfilledCount": 2,
+      "totalCount": 6,
+      "qualityLevel": 1
     }
   ],
   "estimatedGradePart1": 5.5,
@@ -392,46 +549,235 @@ Berechnet und liefert die Summary (Gütestufen und Noten).
 }
 ```
 
+**Status 404 Not Found:**
+- Tritt auf, wenn Person mit gegebener ID nicht existiert
+- Response: Leerer Body
+
+**Status 500 Internal Server Error:**
+- Tritt auf bei Fehlern beim Laden der Kriterien oder Berechnungsfehlern
+- Response: Leerer Body
+
+**Beispiel-Request (cURL):**
+```bash
+curl -X GET http://localhost:8080/api/person/1/summary \
+  -H "Content-Type: application/json"
+```
+
+---
+
+### 4.4 API-Fehlerbehandlung
+
+Alle Endpoints verwenden einheitliche HTTP-Status-Codes:
+
+| Status-Code | Bedeutung | Verwendung |
+|-------------|-----------|------------|
+| 200 OK | Erfolgreiche Anfrage | GET, PUT erfolgreich |
+| 201 Created | Ressource erstellt | POST erfolgreich |
+| 404 Not Found | Ressource nicht gefunden | Person-ID existiert nicht |
+| 500 Internal Server Error | Server-Fehler | Datenbankfehler, JSON-Ladefehler |
+
+**Hinweis:** Aktuell werden keine detaillierten Fehlermeldungen im Response-Body zurückgegeben (MVP). Für Production sollten strukturierte Fehler-Responses implementiert werden.
+
 ### 4.4 Business-Logik
 
 #### Gütestufen-Berechnung
 
-Die Gütestufe wird basierend auf der Anzahl erfüllter Anforderungen berechnet:
+Die Gütestufe wird basierend auf der Anzahl erfüllter Anforderungen berechnet. Diese Logik ist fest definiert und darf nicht geändert werden.
 
-| Erfüllte Anforderungen | Gütestufe |
-|------------------------|-----------|
-| Alle (6/6) | 3 |
-| 4-5 | 2 |
-| 2-3 | 1 |
-| < 2 | 0 |
+**Regeln:**
 
-**Implementierung:** `SummaryService.calculateQualityLevel()`
+| Erfüllte Anforderungen | Gütestufe | Beschreibung |
+|------------------------|-----------|--------------|
+| Alle Anforderungen erfüllt (z.B. 6/6) | 3 | Höchste Qualitätsstufe |
+| 4-5 Anforderungen erfüllt | 2 | Gute Qualität |
+| 2-3 Anforderungen erfüllt | 1 | Grundanforderungen erfüllt |
+| Weniger als 2 erfüllt | 0 | Mindestanforderungen nicht erfüllt |
+
+**Beispiele:**
+- Kriterium A04 hat 6 Anforderungen, 6 erfüllt → Gütestufe 3
+- Kriterium H06 hat 6 Anforderungen, 4 erfüllt → Gütestufe 2
+- Kriterium Doc03 hat 6 Anforderungen, 2 erfüllt → Gütestufe 1
+- Kriterium A04 hat 6 Anforderungen, 1 erfüllt → Gütestufe 0
+
+**Implementierung:** `SummaryService.calculateQualityLevel(int fulfilledCount, int totalCount)`
+
+**Code:**
+```java
+private int calculateQualityLevel(int fulfilledCount, int totalCount) {
+    if (fulfilledCount == totalCount) {
+        return 3;  // Alle erfüllt
+    } else if (fulfilledCount >= 4 && fulfilledCount <= 5) {
+        return 2;  // 4-5 erfüllt
+    } else if (fulfilledCount >= 2 && fulfilledCount <= 3) {
+        return 1;  // 2-3 erfüllt
+    } else {
+        return 0;  // < 2 erfüllt
+    }
+}
+```
+
+---
 
 #### Notenberechnung
 
-Die mutmassliche Note wird pro Teil (Teil 1 oder Teil 2) berechnet:
+Die mutmassliche Note wird pro Teil (Teil 1 oder Teil 2) berechnet. Die Note gibt eine Schätzung der IPA-Note basierend auf den erreichten Gütestufen.
 
 **Formel:**
+
 ```
 Note = 4.0 + (Durchschnitt_Gütestufen * 0.5)
 ```
 
-**Beispiele:**
-- Gütestufe 3 → Note = 4.0 + (3.0 * 0.5) = 5.5
-- Gütestufe 2 → Note = 4.0 + (2.0 * 0.5) = 5.0
-- Gütestufe 1 → Note = 4.0 + (1.0 * 0.5) = 4.5
-- Gütestufe 0 → Note = 4.0 + (0.0 * 0.5) = 4.0
+**Berechnungsschritte:**
 
-**Implementierung:** `SummaryService.calculateSummary()`
+1. **Gütestufen pro Teil sammeln:**
+   - Alle Kriterien werden ihrem Teil zugeordnet (basierend auf Requirements)
+   - Für jedes Kriterium wird die Gütestufe berechnet
+   - Gütestufen werden pro Teil summiert
+
+2. **Durchschnitt berechnen:**
+   ```
+   Durchschnitt_Teil1 = Summe_Gütestufen_Teil1 / Anzahl_Kriterien_Teil1
+   Durchschnitt_Teil2 = Summe_Gütestufen_Teil2 / Anzahl_Kriterien_Teil2
+   ```
+
+3. **Note berechnen:**
+   ```
+   Note_Teil1 = 4.0 + (Durchschnitt_Teil1 * 0.5)
+   Note_Teil2 = 4.0 + (Durchschnitt_Teil2 * 0.5)
+   ```
+
+**Notenskala:**
+
+| Durchschnitt Gütestufen | Note | Interpretation |
+|-------------------------|------|----------------|
+| 3.0 | 5.5 | Sehr gut |
+| 2.5 | 5.25 | Gut |
+| 2.0 | 5.0 | Gut |
+| 1.5 | 4.75 | Genügend |
+| 1.0 | 4.5 | Genügend |
+| 0.5 | 4.25 | Ungenügend |
+| 0.0 | 4.0 | Ungenügend |
+
+**Detaillierte Beispiele:**
+
+**Beispiel 1: Alle Kriterien mit Gütestufe 3**
+- Teil 1: A04 (Gütestufe 3), Doc03 (Gütestufe 3)
+- Durchschnitt Teil 1: (3 + 3) / 2 = 3.0
+- Note Teil 1: 4.0 + (3.0 * 0.5) = 5.5
+
+- Teil 2: H06 (Gütestufe 3)
+- Durchschnitt Teil 2: 3.0 / 1 = 3.0
+- Note Teil 2: 4.0 + (3.0 * 0.5) = 5.5
+
+**Beispiel 2: Gemischte Gütestufen**
+- Teil 1: A04 (Gütestufe 3), Doc03 (Gütestufe 1)
+- Durchschnitt Teil 1: (3 + 1) / 2 = 2.0
+- Note Teil 1: 4.0 + (2.0 * 0.5) = 5.0
+
+- Teil 2: H06 (Gütestufe 2)
+- Durchschnitt Teil 2: 2.0 / 1 = 2.0
+- Note Teil 2: 4.0 + (2.0 * 0.5) = 5.0
+
+**Beispiel 3: Schlechte Leistung**
+- Teil 1: A04 (Gütestufe 0), Doc03 (Gütestufe 1)
+- Durchschnitt Teil 1: (0 + 1) / 2 = 0.5
+- Note Teil 1: 4.0 + (0.5 * 0.5) = 4.25
+
+- Teil 2: H06 (Gütestufe 0)
+- Durchschnitt Teil 2: 0.0 / 1 = 0.0
+- Note Teil 2: 4.0 + (0.0 * 0.5) = 4.0
+
+**Implementierung:** `SummaryService.calculateSummary(Long personId)`
+
+**Code-Ausschnitt:**
+```java
+// Summiere Gütestufen pro Teil
+double sumPart1 = 0.0;
+double sumPart2 = 0.0;
+int countPart1 = 0;
+int countPart2 = 0;
+
+for (Criteria criterion : allCriteria) {
+    int qualityLevel = calculateQualityLevel(fulfilledCount, totalCount);
+    int part = determinePart(criterion);
+    
+    if (part == 1) {
+        sumPart1 += qualityLevel;
+        countPart1++;
+    } else if (part == 2) {
+        sumPart2 += qualityLevel;
+        countPart2++;
+    }
+}
+
+// Berechne Noten
+Double estimatedGradePart1 = countPart1 > 0 
+    ? 4.0 + (sumPart1 / countPart1) * 0.5 
+    : null;
+Double estimatedGradePart2 = countPart2 > 0 
+    ? 4.0 + (sumPart2 / countPart2) * 0.5 
+    : null;
+```
+
+**Hinweise:**
+- Wenn keine Kriterien für einen Teil vorhanden sind, wird `null` zurückgegeben
+- Die Note wird auf 2 Dezimalstellen gerundet (im Frontend)
+- Die Formel ist linear: Jede Gütestufe entspricht 0.5 Notenpunkten
+
+---
 
 #### Teil-Zuordnung
 
-Kriterien werden basierend auf ihren Requirements einem Teil zugeordnet:
-- Wenn alle Requirements `part: 1` haben → Teil 1
-- Wenn alle Requirements `part: 2` haben → Teil 2
-- Bei gemischten Requirements: Mehrheit entscheidet
+Kriterien werden basierend auf ihren Requirements einem Teil (Teil 1 oder Teil 2) zugeordnet. Dies ist wichtig für die separate Notenberechnung pro Teil.
 
-**Implementierung:** `SummaryService.determinePart()`
+**Regeln:**
+
+1. **Alle Requirements zu einem Teil:**
+   - Wenn alle Requirements `part: 1` haben → Kriterium gehört zu Teil 1
+   - Wenn alle Requirements `part: 2` haben → Kriterium gehört zu Teil 2
+
+2. **Gemischte Requirements:**
+   - Wenn Requirements zu beiden Teilen gehören → Mehrheit entscheidet
+   - Bei Gleichstand: Teil 1 wird bevorzugt
+
+**Beispiele:**
+
+**Kriterium A04 (Zeitplan):**
+- Alle 6 Requirements haben `part: 1`
+- → Kriterium gehört zu Teil 1
+
+**Kriterium H06 (Automatisierung):**
+- Alle 6 Requirements haben `part: 2`
+- → Kriterium gehört zu Teil 2
+
+**Kriterium Doc03 (Formale Anforderungen):**
+- Alle 6 Requirements haben `part: 1`
+- → Kriterium gehört zu Teil 1
+
+**Implementierung:** `SummaryService.determinePart(Criteria criterion)`
+
+**Code:**
+```java
+private int determinePart(Criteria criterion) {
+    if (criterion.getRequirements().isEmpty()) {
+        return 1; // Default
+    }
+    
+    int part1Count = 0;
+    int part2Count = 0;
+    
+    for (var req : criterion.getRequirements()) {
+        if (req.getPart() == 1) {
+            part1Count++;
+        } else if (req.getPart() == 2) {
+            part2Count++;
+        }
+    }
+    
+    return part2Count > part1Count ? 2 : 1;
+}
+```
 
 ## 5. Frontend-Architektur
 
