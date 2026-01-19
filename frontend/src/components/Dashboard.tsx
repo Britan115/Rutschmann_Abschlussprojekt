@@ -16,8 +16,8 @@ export default function Dashboard({ personId }: DashboardProps) {
       setLoading(true);
       const response = await criteriaService.getSummary(personId);
       setSummary(response);
-    } catch (err) {
-      setError('Fehler beim Laden der Zusammenfassung');
+    } catch {
+      setError('Fehler beim Laden der Daten');
     } finally {
       setLoading(false);
     }
@@ -27,218 +27,116 @@ export default function Dashboard({ personId }: DashboardProps) {
     loadSummary();
   }, [loadSummary]);
 
-  const getQualityLevelLabel = (level: number): string => {
-    switch (level) {
-      case 3:
-        return 'Gütestufe 3 (Alle Anforderungen erfüllt)';
-      case 2:
-        return 'Gütestufe 2 (4-5 Anforderungen erfüllt)';
-      case 1:
-        return 'Gütestufe 1 (2-3 Anforderungen erfüllt)';
-      case 0:
-        return 'Gütestufe 0 (Weniger als 2 Anforderungen erfüllt)';
-      default:
-        return `Gütestufe ${level}`;
-    }
-  };
-
-  const getQualityLevelColor = (level: number): string => {
-    switch (level) {
-      case 3:
-        return '#16a34a'; // Grün
-      case 2:
-        return '#2563eb'; // Blau
-      case 1:
-        return '#ca8a04'; // Dunkleres Gelb/Gold
-      case 0:
-        return '#dc2626'; // Rot
-      default:
-        return '#6b7280';
-    }
-  };
-
   const formatGrade = (grade: number | null): string => {
-    if (grade === null) {
-      return 'Nicht verfügbar';
-    }
+    if (grade === null) return '—';
     return grade.toFixed(2);
   };
 
+  const getGradeStatus = (grade: number | null): { text: string; className: string } => {
+    if (grade === null) return { text: '', className: '' };
+    if (grade >= 5.5) return { text: 'Sehr gut', className: 'excellent' };
+    if (grade >= 5.0) return { text: 'Gut', className: 'good' };
+    if (grade >= 4.5) return { text: 'Befriedigend', className: 'satisfactory' };
+    if (grade >= 4.0) return { text: 'Genügend', className: 'sufficient' };
+    return { text: 'Ungenügend', className: 'insufficient' };
+  };
+
+  const getQualityLabel = (level: number): string => {
+    switch (level) {
+      case 3: return 'Hervorragend';
+      case 2: return 'Gut';
+      case 1: return 'Genügend';
+      default: return 'Ungenügend';
+    }
+  };
+
   if (loading) {
-    return <div style={{ padding: '2rem', color: '#1a1a1a', fontSize: '1.125rem' }}>Lade Dashboard...</div>;
+    return <div className="loading-text">Daten werden geladen...</div>;
   }
 
   if (error) {
-    return <div style={{ padding: '2rem', color: '#dc2626', fontSize: '1.125rem', fontWeight: 600 }}>{error}</div>;
+    return <div className="status-error">{error}</div>;
   }
 
   if (!summary) {
-    return <div style={{ padding: '2rem', color: '#1a1a1a', fontSize: '1.125rem' }}>Keine Daten verfügbar</div>;
+    return <div className="loading-text">Keine Daten verfügbar</div>;
   }
+
+  const grade1Status = getGradeStatus(summary.estimatedGradePart1);
+  const grade2Status = getGradeStatus(summary.estimatedGradePart2);
 
   return (
     <div>
-      <h2 style={{ marginBottom: '1.5rem', color: '#1a1a1a', fontSize: '1.5rem', fontWeight: 700 }}>
-        Dashboard - Übersicht
-      </h2>
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '1.5rem',
-          marginBottom: '2.5rem',
-        }}
-      >
-        <div
-          style={{
-            borderRadius: '12px',
-            padding: '2rem',
-            backgroundColor: '#ffffff',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #e5e7eb',
-          }}
-        >
-          <h3 style={{ 
-            marginTop: 0, 
-            marginBottom: '1rem', 
-            color: '#1a1a1a', 
-            fontSize: '1.125rem', 
-            fontWeight: 600 
-          }}>
-            Teil 1
-          </h3>
-          <div style={{ 
-            fontSize: '2.5rem', 
-            fontWeight: 700, 
-            color: '#2563eb', 
-            marginBottom: '0.5rem' 
-          }}>
-            {formatGrade(summary.estimatedGradePart1)}
-          </div>
-          <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
-            Mutmassliche Note
-          </div>
-        </div>
-
-        <div
-          style={{
-            borderRadius: '12px',
-            padding: '2rem',
-            backgroundColor: '#ffffff',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #e5e7eb',
-          }}
-        >
-          <h3 style={{ 
-            marginTop: 0, 
-            marginBottom: '1rem', 
-            color: '#1a1a1a', 
-            fontSize: '1.125rem', 
-            fontWeight: 600 
-          }}>
-            Teil 2
-          </h3>
-          <div style={{ 
-            fontSize: '2.5rem', 
-            fontWeight: 700, 
-            color: '#16a34a', 
-            marginBottom: '0.5rem' 
-          }}>
-            {formatGrade(summary.estimatedGradePart2)}
-          </div>
-          <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
-            Mutmassliche Note
-          </div>
-        </div>
-      </div>
-
-      <h3 style={{ marginBottom: '1.25rem', color: '#1a1a1a', fontSize: '1.25rem', fontWeight: 700 }}>
-        Gütestufen pro Kriterium
-      </h3>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {summary.criteriaSummaries.map((criterion: CriterionSummary) => {
-          const qualityColor = getQualityLevelColor(criterion.qualityLevel);
-          const progressPercentage = (criterion.fulfilledCount / criterion.totalCount) * 100;
-
-          return (
-            <div
-              key={criterion.criterionId}
-              style={{
-                borderRadius: '12px',
-                padding: '1.5rem',
-                backgroundColor: '#ffffff',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                border: '1px solid #e5e7eb',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ 
-                    marginTop: 0, 
-                    marginBottom: '0.5rem', 
-                    color: '#1a1a1a', 
-                    fontSize: '1.125rem', 
-                    fontWeight: 600 
-                  }}>
-                    {criterion.criterionId}: {criterion.criterionTitle}
-                  </h4>
-                  <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
-                    {criterion.fulfilledCount} von {criterion.totalCount} Anforderungen erfüllt
-                  </div>
-                </div>
-                <div
-                  style={{
-                    backgroundColor: qualityColor,
-                    color: '#ffffff',
-                    padding: '0.75rem 1.25rem',
-                    borderRadius: '8px',
-                    fontWeight: 700,
-                    fontSize: '1.25rem',
-                    minWidth: '3.5rem',
-                    textAlign: 'center',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                  }}
-                >
-                  {criterion.qualityLevel}
-                </div>
-              </div>
-
-              <div style={{ marginBottom: '1rem' }}>
-                <div
-                  style={{
-                    width: '100%',
-                    height: '8px',
-                    backgroundColor: '#e5e7eb',
-                    borderRadius: '4px',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: `${progressPercentage}%`,
-                      height: '100%',
-                      backgroundColor: qualityColor,
-                      transition: 'width 0.3s ease',
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div style={{ fontSize: '0.9375rem', color: '#4b5563', fontWeight: 500 }}>
-                {getQualityLevelLabel(criterion.qualityLevel)}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-        <button onClick={loadSummary}>
-          Daten aktualisieren
+      <div className="section-header">
+        <h2 className="section-title">Mutmassliche Noten</h2>
+        <button className="secondary" onClick={loadSummary} style={{ padding: '8px 16px' }}>
+          Aktualisieren
         </button>
       </div>
+
+      <div className="grade-grid">
+        <div className="grade-card">
+          <div className="grade-card-header">
+            <span className="grade-label">Teil 1 - Durchführung</span>
+          </div>
+          <div className="grade-value">{formatGrade(summary.estimatedGradePart1)}</div>
+          {grade1Status.text && (
+            <span className={`grade-status ${grade1Status.className}`}>{grade1Status.text}</span>
+          )}
+        </div>
+
+        <div className="grade-card">
+          <div className="grade-card-header">
+            <span className="grade-label">Teil 2 - Dokumentation</span>
+          </div>
+          <div className="grade-value">{formatGrade(summary.estimatedGradePart2)}</div>
+          {grade2Status.text && (
+            <span className={`grade-status ${grade2Status.className}`}>{grade2Status.text}</span>
+          )}
+        </div>
+      </div>
+
+      <div className="section-header" style={{ marginTop: '2rem' }}>
+        <h2 className="section-title">Gütestufen pro Kriterium</h2>
+      </div>
+
+      {summary.criteriaSummaries.map((criterion: CriterionSummary) => {
+        const progressPercent = Math.round((criterion.fulfilledCount / criterion.totalCount) * 100);
+
+        return (
+          <div key={criterion.criterionId} className="criteria-card">
+            <div className="criteria-header">
+              <div>
+                <div className="criteria-id">{criterion.criterionId}</div>
+                <div className="criteria-title">{criterion.criterionTitle}</div>
+              </div>
+              <div className={`quality-badge level-${criterion.qualityLevel}`}>
+                <span className="quality-badge-value">{criterion.qualityLevel}</span>
+                <span className="quality-badge-label">Stufe</span>
+              </div>
+            </div>
+
+            <div className="progress-section">
+              <div className="progress-header">
+                <span className="progress-count">
+                  {criterion.fulfilledCount} von {criterion.totalCount} Anforderungen erfüllt
+                </span>
+                <span className="progress-percent">{progressPercent}%</span>
+              </div>
+              <div className="progress-bar">
+                <div
+                  className={`progress-fill level-${criterion.qualityLevel}`}
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            </div>
+
+            <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+              Bewertung: {getQualityLabel(criterion.qualityLevel)}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

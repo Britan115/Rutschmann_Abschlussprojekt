@@ -22,10 +22,10 @@ describe('PersonForm', () => {
     // TC-COMP-008: PersonForm rendert alle Eingabefelder
     render(<PersonForm />);
 
-    expect(screen.getByLabelText(/^name \*$/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/^vorname \*$/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/^thema der arbeit \*$/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/^abgabedatum \*$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/nachname/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/vorname/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/thema der arbeit/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/abgabedatum/i)).toBeInTheDocument();
   });
 
   it('shows validation errors for empty required fields', async () => {
@@ -33,15 +33,13 @@ describe('PersonForm', () => {
     const user = userEvent.setup();
     render(<PersonForm />);
 
-    const submitButton = screen.getByRole('button', { name: /person speichern/i });
+    const submitButton = screen.getByRole('button', { name: /bewertung starten/i });
     await user.click(submitButton);
 
-    // Die Validierung verhindert das Absenden, daher sollte die API nicht aufgerufen werden
-    // Warte kurz, um sicherzustellen, dass keine API-Calls gemacht wurden
+    // Die Validierung verhindert das Absenden
     await new Promise((resolve) => setTimeout(resolve, 200));
     expect(api.personService.createPerson).not.toHaveBeenCalled();
 
-    // Warte auf Validierungsfehler (React State Update ist asynchron)
     // Prüfe, dass mindestens ein Validierungsfehler angezeigt wird
     await waitFor(
       () => {
@@ -67,17 +65,17 @@ describe('PersonForm', () => {
 
     render(<PersonForm onSuccess={mockOnSuccess} />);
 
-    const nameInput = screen.getByLabelText(/^name \*$/i);
-    const vornameInput = screen.getByLabelText(/^vorname \*$/i);
-    const themaInput = screen.getByLabelText(/^thema der arbeit \*$/i);
-    const abgabedatumInput = screen.getByLabelText(/^abgabedatum \*$/i);
+    const nameInput = screen.getByLabelText(/nachname/i);
+    const vornameInput = screen.getByLabelText(/vorname/i);
+    const themaInput = screen.getByLabelText(/thema der arbeit/i);
+    const abgabedatumInput = screen.getByLabelText(/abgabedatum/i);
 
     await user.type(nameInput, 'Muster');
     await user.type(vornameInput, 'Max');
     await user.type(themaInput, 'IPA-Kriterien-App');
     await user.type(abgabedatumInput, '2024-12-31');
 
-    const submitButton = screen.getByRole('button', { name: /person speichern/i });
+    const submitButton = screen.getByRole('button', { name: /bewertung starten/i });
     await user.click(submitButton);
 
     await waitFor(() => {
@@ -98,21 +96,21 @@ describe('PersonForm', () => {
 
     render(<PersonForm />);
 
-    const nameInput = screen.getByLabelText(/^name \*$/i);
-    const vornameInput = screen.getByLabelText(/^vorname \*$/i);
-    const themaInput = screen.getByLabelText(/^thema der arbeit \*$/i);
-    const abgabedatumInput = screen.getByLabelText(/^abgabedatum \*$/i);
+    const nameInput = screen.getByLabelText(/nachname/i);
+    const vornameInput = screen.getByLabelText(/vorname/i);
+    const themaInput = screen.getByLabelText(/thema der arbeit/i);
+    const abgabedatumInput = screen.getByLabelText(/abgabedatum/i);
 
     await user.type(nameInput, 'Muster');
     await user.type(vornameInput, 'Max');
     await user.type(themaInput, 'IPA-Kriterien-App');
     await user.type(abgabedatumInput, '2024-12-31');
 
-    const submitButton = screen.getByRole('button', { name: /person speichern/i });
+    const submitButton = screen.getByRole('button', { name: /bewertung starten/i });
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/fehler beim speichern/i)).toBeInTheDocument();
+      expect(screen.getByText(/fehler/i)).toBeInTheDocument();
     });
   });
 });

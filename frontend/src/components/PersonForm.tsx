@@ -22,24 +22,16 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
     const newErrors: Partial<Record<keyof Person, string>> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name ist erforderlich';
+      newErrors.name = 'Nachname ist erforderlich';
     }
-
     if (!formData.vorname.trim()) {
       newErrors.vorname = 'Vorname ist erforderlich';
     }
-
     if (!formData.thema.trim()) {
       newErrors.thema = 'Thema ist erforderlich';
     }
-
     if (!formData.abgabedatum) {
       newErrors.abgabedatum = 'Abgabedatum ist erforderlich';
-    } else {
-      const date = new Date(formData.abgabedatum);
-      if (isNaN(date.getTime())) {
-        newErrors.abgabedatum = 'Ungültiges Datum';
-      }
     }
 
     setErrors(newErrors);
@@ -50,24 +42,15 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
     e.preventDefault();
     setSubmitError(null);
 
-    if (!validate()) {
-      return;
-    }
+    if (!validate()) return;
 
     setIsSubmitting(true);
 
     try {
       const savedPerson = await personService.createPerson(formData);
-      setFormData({
-        name: '',
-        vorname: '',
-        thema: '',
-        abgabedatum: '',
-      });
-      if (onSuccess) {
-        onSuccess(savedPerson);
-      }
-    } catch (error) {
+      setFormData({ name: '', vorname: '', thema: '', abgabedatum: '' });
+      if (onSuccess) onSuccess(savedPerson);
+    } catch {
       setSubmitError('Fehler beim Speichern. Bitte versuchen Sie es erneut.');
     } finally {
       setIsSubmitting(false);
@@ -83,139 +66,82 @@ export default function PersonForm({ onSuccess }: PersonFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ 
-      maxWidth: '600px', 
-      margin: '0 auto',
-      backgroundColor: '#ffffff',
-      padding: '2rem',
-      borderRadius: '12px',
-      border: '1px solid #e5e7eb',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-    }}>
-      <h2 style={{ 
-        marginTop: 0, 
-        marginBottom: '1.75rem', 
-        color: '#1a1a1a', 
-        fontSize: '1.5rem',
-        fontWeight: 700 
-      }}>
-        Personendaten erfassen
-      </h2>
-
-      <div style={{ marginBottom: '1.5rem' }}>
-        <label htmlFor="name" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1a1a1a', fontSize: '1rem' }}>
-          Name *
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="z.B. Muster"
-          style={{
-            width: '100%',
-            border: errors.name ? '2px solid #dc2626' : '2px solid #d1d5db',
-          }}
-        />
-        {errors.name && (
-          <span style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '6px', display: 'block', fontWeight: 500 }}>
-            {errors.name}
-          </span>
-        )}
-      </div>
-
-      <div style={{ marginBottom: '1.5rem' }}>
-        <label htmlFor="vorname" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1a1a1a', fontSize: '1rem' }}>
-          Vorname *
-        </label>
-        <input
-          type="text"
-          id="vorname"
-          name="vorname"
-          value={formData.vorname}
-          onChange={handleChange}
-          placeholder="z.B. Max"
-          style={{
-            width: '100%',
-            border: errors.vorname ? '2px solid #dc2626' : '2px solid #d1d5db',
-          }}
-        />
-        {errors.vorname && (
-          <span style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '6px', display: 'block', fontWeight: 500 }}>
-            {errors.vorname}
-          </span>
-        )}
-      </div>
-
-      <div style={{ marginBottom: '1.5rem' }}>
-        <label htmlFor="thema" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1a1a1a', fontSize: '1rem' }}>
-          Thema der Arbeit *
-        </label>
-        <input
-          type="text"
-          id="thema"
-          name="thema"
-          value={formData.thema}
-          onChange={handleChange}
-          placeholder="z.B. Entwicklung einer Webapplikation"
-          style={{
-            width: '100%',
-            border: errors.thema ? '2px solid #dc2626' : '2px solid #d1d5db',
-          }}
-        />
-        {errors.thema && (
-          <span style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '6px', display: 'block', fontWeight: 500 }}>
-            {errors.thema}
-          </span>
-        )}
-      </div>
-
-      <div style={{ marginBottom: '1.5rem' }}>
-        <label htmlFor="abgabedatum" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1a1a1a', fontSize: '1rem' }}>
-          Abgabedatum *
-        </label>
-        <input
-          type="date"
-          id="abgabedatum"
-          name="abgabedatum"
-          value={formData.abgabedatum}
-          onChange={handleChange}
-          style={{
-            width: '100%',
-            border: errors.abgabedatum ? '2px solid #dc2626' : '2px solid #d1d5db',
-          }}
-        />
-        {errors.abgabedatum && (
-          <span style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '6px', display: 'block', fontWeight: 500 }}>
-            {errors.abgabedatum}
-          </span>
-        )}
-      </div>
-
-      {submitError && (
-        <div style={{ 
-          color: '#dc2626', 
-          marginBottom: '1.5rem',
-          padding: '1rem',
-          backgroundColor: '#fef2f2',
-          borderRadius: '8px',
-          fontWeight: 500 
-        }}>
-          {submitError}
+    <div className="form-container">
+      <form onSubmit={handleSubmit} className="form-card">
+        <div className="form-header">
+          <div className="form-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <h1 className="form-title">Neue Bewertung starten</h1>
+          <p className="form-subtitle">Erfassen Sie die Daten des IPA-Kandidaten</p>
         </div>
-      )}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        style={{
-          width: '100%',
-          marginTop: '0.5rem'
-        }}
-      >
-        {isSubmitting ? 'Wird gespeichert...' : 'Person speichern'}
-      </button>
-    </form>
+        <div className="form-group">
+          <label htmlFor="vorname">Vorname <span className="required">*</span></label>
+          <input
+            type="text"
+            id="vorname"
+            name="vorname"
+            className="form-input"
+            value={formData.vorname}
+            onChange={handleChange}
+            placeholder="Max"
+          />
+          {errors.vorname && <div className="form-error">{errors.vorname}</div>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="name">Nachname <span className="required">*</span></label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            className="form-input"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Mustermann"
+          />
+          {errors.name && <div className="form-error">{errors.name}</div>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="thema">Thema der Arbeit <span className="required">*</span></label>
+          <input
+            type="text"
+            id="thema"
+            name="thema"
+            className="form-input"
+            value={formData.thema}
+            onChange={handleChange}
+            placeholder="z.B. Entwicklung einer Webapplikation"
+          />
+          {errors.thema && <div className="form-error">{errors.thema}</div>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="abgabedatum">Abgabedatum <span className="required">*</span></label>
+          <input
+            type="date"
+            id="abgabedatum"
+            name="abgabedatum"
+            className="form-input"
+            value={formData.abgabedatum}
+            onChange={handleChange}
+          />
+          {errors.abgabedatum && <div className="form-error">{errors.abgabedatum}</div>}
+        </div>
+
+        {submitError && (
+          <div className="status-error" style={{ marginBottom: '1rem' }}>{submitError}</div>
+        )}
+
+        <button type="submit" className="form-submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Wird gespeichert...' : 'Bewertung starten'}
+        </button>
+      </form>
+    </div>
   );
 }

@@ -1,0 +1,39 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="0" errors="0" time="13.207801000000003">
+<testsuite name="app.spec.ts" timestamp="2026-01-19T13:59:07.527Z" hostname="chromium" tests="5" failures="0" skipped="0" time="22.593" errors="0">
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-001: Startseite zeigt Personenformular" classname="app.spec.ts" time="4.169">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\app-IPA-Kriterien-Tracker--ab080-eite-zeigt-Personenformular-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-002: Formular zeigt Validierungsfehler bei leeren Feldern" classname="app.spec.ts" time="4.174">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\app-IPA-Kriterien-Tracker--64bda-gsfehler-bei-leeren-Feldern-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-003: Person erfolgreich anlegen" classname="app.spec.ts" time="4.638">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\app-IPA-Kriterien-Tracker--b8a19--Person-erfolgreich-anlegen-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-004: Kriterien anzeigen und Checkbox aktivieren" classname="app.spec.ts" time="4.674">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\app-IPA-Kriterien-Tracker--4f231-gen-und-Checkbox-aktivieren-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-005: Dashboard zeigt Noten an" classname="app.spec.ts" time="4.938">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\app-IPA-Kriterien-Tracker--20e0d-05-Dashboard-zeigt-Noten-an-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

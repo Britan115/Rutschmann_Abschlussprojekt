@@ -70,7 +70,7 @@ Kurze Übersicht, wo jedes Kriterium im Projekt erfüllt wird.
 - Backend-Tests werden automatisch ausgeführt (Zeilen 80-95: `mvn test`)
 - Frontend-Tests werden automatisch ausgeführt (Zeilen 180-195: `npm run test`)
 - Test-Ergebnisse in GitHub Actions sichtbar (JUnit Reports, Vitest Coverage)
-- 37 Tests insgesamt (21 Backend + 16 Frontend), alle bestehen
+- 42 Tests insgesamt (21 Backend + 16 Component + 5 E2E), alle bestehen
 
 ---
 
@@ -151,12 +151,13 @@ Kurze Übersicht, wo jedes Kriterium im Projekt erfüllt wird.
 - `docs/testfaelle.md` - 34 dokumentierte Testfälle
 - `docs/testkonzept.md` - Traceability-Matrix
 - `backend/src/test/` - 21 Backend-Tests
-- `frontend/src/components/*.test.tsx` - 16 Frontend-Tests
+- `frontend/src/components/*.test.tsx` - 16 Component-Tests
+- `frontend/e2e/app.spec.ts` - 5 E2E-Tests
 
 **Was zu sehen ist:**
-- 37 automatisierte Tests implementiert
+- 42 automatisierte Tests implementiert
 - 34 Testfälle dokumentiert mit Traceability
-- 100% der definierten Testfälle bestehen (37/37)
+- 100% der definierten Testfälle bestehen (42/42)
 - Jeder Testfall ist einer Anforderung zugeordnet
 
 ---
@@ -169,14 +170,54 @@ Kurze Übersicht, wo jedes Kriterium im Projekt erfüllt wird.
 - `backend/src/test/java/ch/bbw/ipa/service/SummaryServiceTest.java` - Unit Tests
 - `backend/src/test/java/ch/bbw/ipa/controller/` - Integration Tests
 - `frontend/src/components/*.test.tsx` - Component Tests
+- `frontend/e2e/app.spec.ts` - E2E Tests
 - `.github/workflows/ci-build-lint.yml` - Automatisierte Ausführung
+
+**Testpyramide:**
+```
+         /\
+        /  \  E2E Tests (5)
+       /----\
+      /      \ Component Tests (16)
+     /--------\
+    /          \ Unit/Integration Tests (21)
+```
 
 **Was zu sehen ist:**
 - 7 Unit Tests (Backend)
 - 14 Integration Tests (Backend)
 - 16 Component Tests (Frontend)
+- 5 E2E Tests (Playwright)
 - Alle Tests laufen automatisch in CI/CD Pipeline
 - Mocks/Stubs verwendet (Mockito, Vitest)
+
+**Tests ausführen:**
+
+```bash
+# Backend Tests
+cd backend
+mvn test
+
+# Frontend Component Tests
+cd frontend
+npm run test
+
+# Frontend E2E Tests
+cd frontend
+npm run test:e2e
+
+# E2E Tests mit UI
+npm run test:e2e:ui
+```
+
+**E2E-Testfälle:**
+| Test-ID | Beschreibung |
+|---------|--------------|
+| TC-E2E-001 | Startseite zeigt Personenformular |
+| TC-E2E-002 | Formular zeigt Validierungsfehler |
+| TC-E2E-003 | Person erfolgreich anlegen |
+| TC-E2E-004 | Kriterien anzeigen und Checkbox aktivieren |
+| TC-E2E-005 | Dashboard zeigt Noten an |
 
 ---
 
@@ -188,7 +229,7 @@ Kurze Übersicht, wo jedes Kriterium im Projekt erfüllt wird.
 - `docs/testprotokoll.md` - Vollständiges Testergebnis-Protokoll (344 Zeilen)
 
 **Was zu sehen ist:**
-- Alle 37 Tests mit Status dokumentiert
+- Alle 42 Tests mit Status dokumentiert
 - 4 identifizierte Fehler dokumentiert und behoben
 - Testabdeckung dokumentiert: > 80%
 - Qualitätssicherung dokumentiert
@@ -226,7 +267,9 @@ Kurze Übersicht, wo jedes Kriterium im Projekt erfüllt wird.
 - Testfälle: `docs/testfaelle.md`
 - Testergebnisse: `docs/testprotokoll.md`
 - Backend-Tests: `backend/src/test/java/ch/bbw/ipa/`
-- Frontend-Tests: `frontend/src/components/*.test.tsx`
+- Frontend Component-Tests: `frontend/src/components/*.test.tsx`
+- Frontend E2E-Tests: `frontend/e2e/app.spec.ts`
+- Playwright-Config: `frontend/playwright.config.ts`
 
 **Projekt:**
 - README: `README.md`

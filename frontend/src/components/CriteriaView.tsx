@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { criteriaService } from '../services/api';
-import type {
-  Criteria,
-  Requirement,
-  CriterionProgressRequest,
-} from '../services/api';
+import type { Criteria, Requirement, CriterionProgressRequest } from '../services/api';
 
 interface CriteriaViewProps {
   personId: number;
@@ -16,7 +12,7 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<Record<string, CriterionProgressRequest>>({});
   const [saving, setSaving] = useState<Record<string, boolean>>({});
-  const [saveMessage, setSaveMessage] = useState<Record<string, string>>({});
+  const [saveStatus, setSaveStatus] = useState<Record<string, 'success' | 'error' | null>>({});
 
   useEffect(() => {
     loadCriteria();
@@ -29,21 +25,18 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
       setCriteria(response.criteria);
 
       const initialProgress: Record<string, CriterionProgressRequest> = {};
-      response.criteria.forEach((criterion) => {
-        initialProgress[criterion.id] = {
-          fulfilledRequirements: [],
-          notes: '',
-        };
+      response.criteria.forEach((c) => {
+        initialProgress[c.id] = { fulfilledRequirements: [], notes: '' };
       });
       setProgress(initialProgress);
-    } catch (err) {
+    } catch {
       setError('Fehler beim Laden der Kriterien');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRequirementToggle = (criterionId: string, requirementId: string) => {
+  const handleToggle = (criterionId: string, requirementId: string) => {
     setProgress((prev) => {
       const current = prev[criterionId] || { fulfilledRequirements: [], notes: '' };
       const fulfilled = current.fulfilledRequirements || [];
@@ -64,219 +57,137 @@ export default function CriteriaView({ personId }: CriteriaViewProps) {
   const handleNotesChange = (criterionId: string, notes: string) => {
     setProgress((prev) => ({
       ...prev,
-      [criterionId]: {
-        ...(prev[criterionId] || { fulfilledRequirements: [] }),
-        notes,
-      },
+      [criterionId]: { ...(prev[criterionId] || { fulfilledRequirements: [] }), notes },
     }));
   };
 
   const handleSave = async (criterionId: string) => {
     try {
       setSaving((prev) => ({ ...prev, [criterionId]: true }));
-      setSaveMessage((prev) => ({ ...prev, [criterionId]: '' }));
+      setSaveStatus((prev) => ({ ...prev, [criterionId]: null }));
 
-      const currentProgress = progress[criterionId] || {
-        fulfilledRequirements: [],
-        notes: '',
-      };
+      await criteriaService.saveProgress(
+        personId,
+        criterionId,
+        progress[criterionId] || { fulfilledRequirements: [], notes: '' }
+      );
 
-      await criteriaService.saveProgress(personId, criterionId, currentProgress);
-
-      setSaveMessage((prev) => ({
-        ...prev,
-        [criterionId]: 'Fortschritt erfolgreich gespeichert',
-      }));
-
+      setSaveStatus((prev) => ({ ...prev, [criterionId]: 'success' }));
       setTimeout(() => {
-        setSaveMessage((prev) => {
-          const newMessages = { ...prev };
-          delete newMessages[criterionId];
-          return newMessages;
-        });
+        setSaveStatus((prev) => ({ ...prev, [criterionId]: null }));
       }, 3000);
-    } catch (err) {
-      setSaveMessage((prev) => ({
-        ...prev,
-        [criterionId]: 'Fehler beim Speichern',
-      }));
+    } catch {
+      setSaveStatus((prev) => ({ ...prev, [criterionId]: 'error' }));
     } finally {
       setSaving((prev) => ({ ...prev, [criterionId]: false }));
     }
   };
 
+  const getQualityLevel = (count: number): number => {
+    if (count >= 6) return 3;
+    if (count >= 4) return 2;
+    if (count >= 2) return 1;
+    return 0;
+  };
+
   if (loading) {
-    return <div style={{ padding: '2rem', color: '#1a1a1a', fontSize: '1.125rem' }}>Lade Kriterien...</div>;
+    return <div className="loading-text">Kriterien werden geladen...</div>;
   }
 
   if (error) {
-    return <div style={{ padding: '2rem', color: '#dc2626', fontSize: '1.125rem', fontWeight: 600 }}>{error}</div>;
+    return <div className="status-error">{error}</div>;
   }
 
   return (
     <div>
-      <h2 style={{ marginBottom: '1.5rem', color: '#1a1a1a', fontSize: '1.5rem', fontWeight: 700 }}>
-        IPA-Kriterien
-      </h2>
+      <div className="section-header">
+        <h2 className="section-title">Bewertungskriterien</h2>
+      </div>
 
       {criteria.map((criterion) => {
-        const currentProgress = progress[criterion.id] || {
-          fulfilledRequirements: [],
-          notes: '',
-        };
+        const currentProgress = progress[criterion.id] || { fulfilledRequirements: [], notes: '' };
         const fulfilledCount = currentProgress.fulfilledRequirements.length;
         const totalCount = criterion.requirements.length;
+        const qualityLevel = getQualityLevel(fulfilledCount);
+        const progressPercent = Math.round((fulfilledCount / totalCount) * 100);
 
         return (
-          <div
-            key={criterion.id}
-            style={{
-              border: '1px solid #e5e7eb',
-              borderRadius: '12px',
-              padding: '1.75rem',
-              marginBottom: '1.5rem',
-              backgroundColor: '#ffffff',
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <h3 style={{ 
-              marginTop: 0, 
-              marginBottom: '0.75rem', 
-              color: '#1a1a1a', 
-              fontSize: '1.25rem',
-              fontWeight: 700 
-            }}>
-              {criterion.id}: {criterion.title}
-            </h3>
-            <p style={{ 
-              color: '#4b5563', 
-              marginBottom: '1.5rem', 
-              fontSize: '1rem',
-              lineHeight: 1.6 
-            }}>
-              {criterion.question}
-            </p>
+          <div key={criterion.id} className="criteria-card">
+            <div className="criteria-header">
+              <div>
+                <div className="criteria-id">{criterion.id}</div>
+                <div className="criteria-title">{criterion.title}</div>
+                <p className="criteria-question">{criterion.question}</p>
+              </div>
+              <div className={`quality-badge level-${qualityLevel}`}>
+                <span className="quality-badge-value">{qualityLevel}</span>
+                <span className="quality-badge-label">Stufe</span>
+              </div>
+            </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <h4 style={{ 
-                marginBottom: '1rem', 
-                color: '#1a1a1a', 
-                fontSize: '1.125rem',
-                fontWeight: 600 
-              }}>
-                Anforderungen:
-              </h4>
-              {criterion.requirements.map((requirement: Requirement) => {
-                const isChecked = currentProgress.fulfilledRequirements.includes(
-                  requirement.id
-                );
+            <div className="progress-section">
+              <div className="progress-header">
+                <span className="progress-count">{fulfilledCount} von {totalCount} erfüllt</span>
+                <span className="progress-percent">{progressPercent}%</span>
+              </div>
+              <div className="progress-bar">
+                <div
+                  className={`progress-fill level-${qualityLevel}`}
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            </div>
 
+            <div className="requirements-section">
+              <div className="requirements-title">Anforderungen</div>
+              {criterion.requirements.map((req: Requirement) => {
+                const isChecked = currentProgress.fulfilledRequirements.includes(req.id);
                 return (
                   <div
-                    key={requirement.id}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      marginBottom: '1rem',
-                      padding: '0.75rem',
-                      backgroundColor: isChecked ? '#f0fdf4' : '#f9fafb',
-                      borderRadius: '8px',
-                      border: isChecked ? '1px solid #86efac' : '1px solid #e5e7eb',
-                    }}
+                    key={req.id}
+                    className={`requirement-item ${isChecked ? 'checked' : ''}`}
+                    onClick={() => handleToggle(criterion.id, req.id)}
                   >
                     <input
                       type="checkbox"
-                      id={`${criterion.id}-${requirement.id}`}
                       checked={isChecked}
-                      onChange={() => handleRequirementToggle(criterion.id, requirement.id)}
-                      style={{ 
-                        marginRight: '12px', 
-                        marginTop: '3px',
-                        flexShrink: 0 
-                      }}
+                      onChange={() => {}}
+                      onClick={(e) => e.stopPropagation()}
                     />
-                    <label
-                      htmlFor={`${criterion.id}-${requirement.id}`}
-                      style={{
-                        flex: 1,
-                        cursor: 'pointer',
-                        color: '#1a1a1a',
-                        fontSize: '0.9375rem',
-                        lineHeight: 1.6,
-                        fontWeight: 400,
-                        margin: 0,
-                      }}
-                    >
-                      <strong style={{ color: '#1a1a1a' }}>{requirement.id}:</strong> {requirement.description}
-                    </label>
+                    <span className="requirement-text">
+                      <strong>{req.id}:</strong> {req.description}
+                    </span>
                   </div>
                 );
               })}
             </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label
-                htmlFor={`notes-${criterion.id}`}
-                style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
-                  fontWeight: 600, 
-                  color: '#1a1a1a', 
-                  fontSize: '1rem' 
-                }}
-              >
-                Notizen:
-              </label>
+            <div className="notes-section">
+              <div className="notes-label">Notizen (optional)</div>
               <textarea
-                id={`notes-${criterion.id}`}
+                className="notes-textarea"
                 value={currentProgress.notes || ''}
                 onChange={(e) => handleNotesChange(criterion.id, e.target.value)}
-                placeholder="Notizen zu diesem Kriterium eingeben..."
-                rows={3}
-                style={{
-                  width: '100%',
-                  resize: 'vertical',
-                }}
+                placeholder="Notizen zu diesem Kriterium..."
               />
             </div>
 
-            <div style={{ 
-              marginBottom: '1.25rem', 
-              fontSize: '1rem', 
-              color: '#1a1a1a',
-              fontWeight: 600,
-              padding: '0.75rem 1rem',
-              backgroundColor: '#f3f4f6',
-              borderRadius: '8px',
-              display: 'inline-block'
-            }}>
-              Erfüllt: {fulfilledCount} von {totalCount} Anforderungen
-            </div>
-
-            <div>
+            <div className="card-actions">
               <button
                 onClick={() => handleSave(criterion.id)}
                 disabled={saving[criterion.id]}
+                style={{ padding: '10px 20px' }}
               >
-                {saving[criterion.id] ? 'Wird gespeichert...' : 'Fortschritt speichern'}
+                {saving[criterion.id] ? 'Speichern...' : 'Speichern'}
               </button>
-            </div>
 
-            {saveMessage[criterion.id] && (
-              <div
-                style={{
-                  marginTop: '1rem',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '8px',
-                  backgroundColor: saveMessage[criterion.id].includes('Fehler') ? '#fef2f2' : '#f0fdf4',
-                  color: saveMessage[criterion.id].includes('Fehler') ? '#dc2626' : '#16a34a',
-                  fontSize: '0.9375rem',
-                  fontWeight: 600,
-                }}
-              >
-                {saveMessage[criterion.id]}
-              </div>
-            )}
+              {saveStatus[criterion.id] === 'success' && (
+                <span className="status-success">Gespeichert</span>
+              )}
+              {saveStatus[criterion.id] === 'error' && (
+                <span className="status-error">Fehler beim Speichern</span>
+              )}
+            </div>
           </div>
         );
       })}

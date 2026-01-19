@@ -91,10 +91,11 @@ docker-compose -f docker-compose.staging.yml up -d
 
 ### Option 2: Railway
 
-1. Railway Account erstellen
+1. Railway Account erstellen auf https://railway.app
 2. GitHub Repository verbinden
-3. Secrets in Railway konfigurieren
-4. Automatisches Deployment aktivieren
+3. PostgreSQL Datenbank hinzufügen
+4. Backend und Frontend Services erstellen
+5. Umgebungsvariablen konfigurieren
 
 ### Option 3: Render
 
