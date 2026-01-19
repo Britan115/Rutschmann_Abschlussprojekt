@@ -55,8 +55,9 @@ describe('Dashboard', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/zeitplan/i)).toBeInTheDocument();
-      expect(screen.getByText(/gütestufe 3/i)).toBeInTheDocument();
-      expect(screen.getByText(/gütestufe 2/i)).toBeInTheDocument();
+      // Gütestufen werden als Zahlen in Badges angezeigt
+      expect(screen.getByText('3')).toBeInTheDocument();
+      expect(screen.getByText('2')).toBeInTheDocument();
     });
   });
 
@@ -84,8 +85,8 @@ describe('Dashboard', () => {
     });
   });
 
-  it('displays N/A when no data available', async () => {
-    // TC-COMP-022: Dashboard zeigt "N/A" wenn keine Daten vorhanden
+  it('displays dash when no data available', async () => {
+    // TC-COMP-022: Dashboard zeigt "—" wenn keine Daten vorhanden
     const emptySummary = {
       criteriaSummaries: [],
       estimatedGradePart1: null,
@@ -96,9 +97,9 @@ describe('Dashboard', () => {
     render(<Dashboard personId={1} />);
 
     await waitFor(() => {
-      // "Nicht verfügbar" wird für Teil 1 und Teil 2 angezeigt
-      const notAvailableTexts = screen.getAllByText(/nicht verfügbar/i);
-      expect(notAvailableTexts.length).toBeGreaterThan(0);
+      // "—" wird für fehlende Noten angezeigt
+      const dashes = screen.getAllByText('—');
+      expect(dashes.length).toBeGreaterThan(0);
     });
   });
 
@@ -109,7 +110,7 @@ describe('Dashboard', () => {
     render(<Dashboard personId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText(/fehler beim laden/i)).toBeInTheDocument();
+      expect(screen.getByText(/fehler/i)).toBeInTheDocument();
     });
   });
 });

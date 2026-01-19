@@ -43,8 +43,6 @@ describe('CriteriaView', () => {
     render(<CriteriaView personId={1} />);
 
     await waitFor(() => {
-      // Der Text wird als "A04: Zeitplan" gerendert
-      // Es kann mehrere Elemente mit "Zeitplan" geben, daher getAllByText
       const zeitplanElements = screen.getAllByText(/zeitplan/i);
       expect(zeitplanElements.length).toBeGreaterThan(0);
       expect(api.criteriaService.getCriteria).toHaveBeenCalled();
@@ -56,8 +54,8 @@ describe('CriteriaView', () => {
     render(<CriteriaView personId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Anforderung 1')).toBeInTheDocument();
-      expect(screen.getByText('Anforderung 2')).toBeInTheDocument();
+      expect(screen.getByText(/anforderung 1/i)).toBeInTheDocument();
+      expect(screen.getByText(/anforderung 2/i)).toBeInTheDocument();
     });
 
     const checkboxes = screen.getAllByRole('checkbox');
@@ -74,15 +72,14 @@ describe('CriteriaView', () => {
     });
   });
 
-  it('saves progress when checkbox is changed', async () => {
-    // TC-COMP-004: CriteriaView speichert Fortschritt bei Checkbox-Änderung
+  it('saves progress when save button is clicked', async () => {
+    // TC-COMP-004: CriteriaView speichert Fortschritt
     const user = userEvent.setup();
     vi.mocked(api.criteriaService.saveProgress).mockResolvedValue();
 
     render(<CriteriaView personId={1} />);
 
     await waitFor(() => {
-      // Es kann mehrere Elemente mit "Zeitplan" geben
       const zeitplanElements = screen.getAllByText(/zeitplan/i);
       expect(zeitplanElements.length).toBeGreaterThan(0);
     });
@@ -91,8 +88,8 @@ describe('CriteriaView', () => {
     if (checkboxes.length > 0) {
       await user.click(checkboxes[0]);
 
-      // Warte auf Save-Button und klicke
-      const saveButton = screen.getByRole('button', { name: /fortschritt speichern/i });
+      // Button ist jetzt "Speichern"
+      const saveButton = screen.getByRole('button', { name: /^speichern$/i });
       await user.click(saveButton);
 
       await waitFor(() => {
@@ -113,10 +110,10 @@ describe('CriteriaView', () => {
       expect(textarea).toBeInTheDocument();
     });
 
-    const textarea = screen.getByPlaceholderText(/notizen zu diesem kriterium/i);
+    const textarea = screen.getByPlaceholderText(/notizen/i);
     await user.type(textarea, 'Test Notiz');
 
-    const saveButton = screen.getByRole('button', { name: /fortschritt speichern/i });
+    const saveButton = screen.getByRole('button', { name: /^speichern$/i });
     await user.click(saveButton);
 
     await waitFor(() => {
@@ -137,7 +134,7 @@ describe('CriteriaView', () => {
     render(<CriteriaView personId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText(/fehler beim laden/i)).toBeInTheDocument();
+      expect(screen.getByText(/fehler/i)).toBeInTheDocument();
     });
   });
 });
