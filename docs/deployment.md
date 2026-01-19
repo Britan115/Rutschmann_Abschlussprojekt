@@ -89,12 +89,56 @@ docker build -t ipa-frontend:latest ./frontend
 docker-compose -f docker-compose.staging.yml up -d
 ```
 
-### Option 2: Railway
+### Option 2: Railway (Empfohlen)
 
-1. Railway Account erstellen
-2. GitHub Repository verbinden
-3. Secrets in Railway konfigurieren
-4. Automatisches Deployment aktivieren
+**Schritt-für-Schritt Anleitung:**
+
+1. **Railway Account erstellen:**
+   - Gehe zu https://railway.app
+   - Klicke "Start a New Project"
+   - Melde dich mit GitHub an
+
+2. **Neues Projekt erstellen:**
+   - Klicke "New Project"
+   - Wähle "Deploy from GitHub repo"
+   - Wähle das Repository `Rutschmann_Abschlussprojekt`
+
+3. **PostgreSQL hinzufügen:**
+   - Im Projekt: Klicke "New" → "Database" → "Add PostgreSQL"
+   - Railway erstellt automatisch die Datenbank
+   - Die Verbindungsdaten werden als Umgebungsvariablen bereitgestellt
+
+4. **Backend Service erstellen:**
+   - Klicke "New" → "GitHub Repo"
+   - Wähle das Repository
+   - Klicke auf den Service → "Settings"
+   - Setze "Root Directory" auf `backend`
+   - Railway erkennt automatisch das Dockerfile
+
+5. **Backend Umgebungsvariablen:**
+   - Im Backend-Service → "Variables"
+   - Füge hinzu (mit Werten aus PostgreSQL):
+   ```
+   SPRING_DATASOURCE_URL=${{Postgres.DATABASE_URL}}
+   SPRING_DATASOURCE_USERNAME=${{Postgres.PGUSER}}
+   SPRING_DATASOURCE_PASSWORD=${{Postgres.PGPASSWORD}}
+   ```
+
+6. **Frontend Service erstellen:**
+   - Klicke "New" → "GitHub Repo"
+   - Wähle das Repository
+   - Setze "Root Directory" auf `frontend`
+   - Füge Variable hinzu:
+   ```
+   VITE_API_URL=https://[BACKEND-URL]/api
+   ```
+   (Backend-URL findest du im Backend-Service unter "Settings" → "Domains")
+
+7. **Domains einrichten:**
+   - Für jeden Service: "Settings" → "Networking" → "Generate Domain"
+   - Railway generiert automatisch URLs wie `xxx.up.railway.app`
+
+**Fertig!** Die App wird automatisch deployed bei jedem Push auf `main`.
 
 ### Option 3: Render
 
