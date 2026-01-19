@@ -1,0 +1,14 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="0" errors="0" time="8.848533999999999">
+<testsuite name="app.spec.ts" timestamp="2026-01-19T13:46:02.376Z" hostname="chromium" tests="5" failures="0" skipped="0" time="12.769" errors="0">
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-001: Startseite zeigt Personenformular" classname="app.spec.ts" time="2.165">
+</testcase>
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-002: Formular zeigt Validierungsfehler bei leeren Feldern" classname="app.spec.ts" time="2.183">
+</testcase>
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-003: Person erfolgreich anlegen" classname="app.spec.ts" time="2.816">
+</testcase>
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-004: Kriterien anzeigen und Checkbox aktivieren" classname="app.spec.ts" time="2.821">
+</testcase>
+<testcase name="IPA Kriterien-Tracker E2E Tests › TC-E2E-005: Dashboard zeigt Noten an" classname="app.spec.ts" time="2.784">
+</testcase>
+</testsuite>
+</testsuites>
