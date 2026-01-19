@@ -29,215 +29,125 @@ export default function Dashboard({ personId }: DashboardProps) {
 
   const getQualityLevelLabel = (level: number): string => {
     switch (level) {
-      case 3:
-        return 'Gütestufe 3 (Alle Anforderungen erfüllt)';
-      case 2:
-        return 'Gütestufe 2 (4-5 Anforderungen erfüllt)';
-      case 1:
-        return 'Gütestufe 1 (2-3 Anforderungen erfüllt)';
-      case 0:
-        return 'Gütestufe 0 (Weniger als 2 Anforderungen erfüllt)';
-      default:
-        return `Gütestufe ${level}`;
+      case 3: return 'Hervorragend - Alle Anforderungen erfüllt';
+      case 2: return 'Gut - 4-5 Anforderungen erfüllt';
+      case 1: return 'Genügend - 2-3 Anforderungen erfüllt';
+      case 0: return 'Ungenügend - Weniger als 2 erfüllt';
+      default: return `Gütestufe ${level}`;
     }
   };
 
-  const getQualityLevelColor = (level: number): string => {
-    switch (level) {
-      case 3:
-        return '#16a34a'; // Grün
-      case 2:
-        return '#2563eb'; // Blau
-      case 1:
-        return '#ca8a04'; // Dunkleres Gelb/Gold
-      case 0:
-        return '#dc2626'; // Rot
-      default:
-        return '#6b7280';
-    }
+  const getQualityLevelClass = (level: number): string => {
+    return `level-${level}`;
   };
 
   const formatGrade = (grade: number | null): string => {
-    if (grade === null) {
-      return 'Nicht verfügbar';
-    }
+    if (grade === null) return '—';
     return grade.toFixed(2);
   };
 
+  const getGradeStatus = (grade: number | null): string => {
+    if (grade === null) return '';
+    if (grade >= 5.5) return 'Sehr gut';
+    if (grade >= 5.0) return 'Gut';
+    if (grade >= 4.5) return 'Befriedigend';
+    if (grade >= 4.0) return 'Genügend';
+    return 'Ungenügend';
+  };
+
   if (loading) {
-    return <div style={{ padding: '2rem', color: '#1a1a1a', fontSize: '1.125rem' }}>Lade Dashboard...</div>;
+    return (
+      <div className="loading-text">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="animate-pulse" style={{ display: 'inline-block', marginRight: '8px', verticalAlign: 'middle' }}>
+          <circle cx="12" cy="12" r="10" />
+        </svg>
+        Dashboard wird geladen...
+      </div>
+    );
   }
 
   if (error) {
-    return <div style={{ padding: '2rem', color: '#dc2626', fontSize: '1.125rem', fontWeight: 600 }}>{error}</div>;
+    return <div className="status-error">{error}</div>;
   }
 
   if (!summary) {
-    return <div style={{ padding: '2rem', color: '#1a1a1a', fontSize: '1.125rem' }}>Keine Daten verfügbar</div>;
+    return <div className="empty-state">Keine Daten verfügbar</div>;
   }
 
   return (
-    <div>
-      <h2 style={{ marginBottom: '1.5rem', color: '#1a1a1a', fontSize: '1.5rem', fontWeight: 700 }}>
-        Dashboard - Übersicht
-      </h2>
+    <div className="animate-fade-in">
+      <div className="section-header">
+        <h2 className="section-title">Notenübersicht</h2>
+      </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '1.5rem',
-          marginBottom: '2.5rem',
-        }}
-      >
-        <div
-          style={{
-            borderRadius: '12px',
-            padding: '2rem',
-            backgroundColor: '#ffffff',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #e5e7eb',
-          }}
-        >
-          <h3 style={{ 
-            marginTop: 0, 
-            marginBottom: '1rem', 
-            color: '#1a1a1a', 
-            fontSize: '1.125rem', 
-            fontWeight: 600 
-          }}>
-            Teil 1
-          </h3>
-          <div style={{ 
-            fontSize: '2.5rem', 
-            fontWeight: 700, 
-            color: '#2563eb', 
-            marginBottom: '0.5rem' 
-          }}>
-            {formatGrade(summary.estimatedGradePart1)}
-          </div>
-          <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
-            Mutmassliche Note
-          </div>
+      <div className="grade-grid">
+        <div className="grade-card">
+          <div className="grade-label">Teil 1 - Durchführung</div>
+          <div className="grade-value">{formatGrade(summary.estimatedGradePart1)}</div>
+          <div className="grade-subtitle">{getGradeStatus(summary.estimatedGradePart1)}</div>
         </div>
 
-        <div
-          style={{
-            borderRadius: '12px',
-            padding: '2rem',
-            backgroundColor: '#ffffff',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #e5e7eb',
-          }}
-        >
-          <h3 style={{ 
-            marginTop: 0, 
-            marginBottom: '1rem', 
-            color: '#1a1a1a', 
-            fontSize: '1.125rem', 
-            fontWeight: 600 
-          }}>
-            Teil 2
-          </h3>
-          <div style={{ 
-            fontSize: '2.5rem', 
-            fontWeight: 700, 
-            color: '#16a34a', 
-            marginBottom: '0.5rem' 
-          }}>
-            {formatGrade(summary.estimatedGradePart2)}
-          </div>
-          <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
-            Mutmassliche Note
-          </div>
+        <div className="grade-card part-2">
+          <div className="grade-label">Teil 2 - Dokumentation</div>
+          <div className="grade-value">{formatGrade(summary.estimatedGradePart2)}</div>
+          <div className="grade-subtitle">{getGradeStatus(summary.estimatedGradePart2)}</div>
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '1.25rem', color: '#1a1a1a', fontSize: '1.25rem', fontWeight: 700 }}>
-        Gütestufen pro Kriterium
-      </h3>
+      <div className="section-header">
+        <h2 className="section-title">Kriterien im Detail</h2>
+        <button onClick={loadSummary} className="secondary" style={{ padding: '10px 20px', minHeight: 'auto', fontSize: '0.875rem' }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="23,4 23,10 17,10" />
+            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+          </svg>
+          Aktualisieren
+        </button>
+      </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {summary.criteriaSummaries.map((criterion: CriterionSummary) => {
-          const qualityColor = getQualityLevelColor(criterion.qualityLevel);
+      <div>
+        {summary.criteriaSummaries.map((criterion: CriterionSummary, index: number) => {
           const progressPercentage = (criterion.fulfilledCount / criterion.totalCount) * 100;
+          const levelClass = getQualityLevelClass(criterion.qualityLevel);
 
           return (
             <div
               key={criterion.criterionId}
-              style={{
-                borderRadius: '12px',
-                padding: '1.5rem',
-                backgroundColor: '#ffffff',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                border: '1px solid #e5e7eb',
-              }}
+              className="criteria-card"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ 
-                    marginTop: 0, 
-                    marginBottom: '0.5rem', 
-                    color: '#1a1a1a', 
-                    fontSize: '1.125rem', 
-                    fontWeight: 600 
-                  }}>
+              <div className="criteria-header">
+                <div>
+                  <h3 className="criteria-title">
                     {criterion.criterionId}: {criterion.criterionTitle}
-                  </h4>
-                  <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500 }}>
+                  </h3>
+                  <p className="criteria-question">
                     {criterion.fulfilledCount} von {criterion.totalCount} Anforderungen erfüllt
-                  </div>
+                  </p>
                 </div>
-                <div
-                  style={{
-                    backgroundColor: qualityColor,
-                    color: '#ffffff',
-                    padding: '0.75rem 1.25rem',
-                    borderRadius: '8px',
-                    fontWeight: 700,
-                    fontSize: '1.25rem',
-                    minWidth: '3.5rem',
-                    textAlign: 'center',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                  }}
-                >
+                <div className={`quality-badge ${levelClass}`}>
                   {criterion.qualityLevel}
                 </div>
               </div>
 
-              <div style={{ marginBottom: '1rem' }}>
-                <div
-                  style={{
-                    width: '100%',
-                    height: '8px',
-                    backgroundColor: '#e5e7eb',
-                    borderRadius: '4px',
-                    overflow: 'hidden',
-                  }}
-                >
+              <div className="progress-container">
+                <div className="progress-bar">
                   <div
-                    style={{
-                      width: `${progressPercentage}%`,
-                      height: '100%',
-                      backgroundColor: qualityColor,
-                      transition: 'width 0.3s ease',
-                    }}
+                    className={`progress-fill ${levelClass}`}
+                    style={{ width: `${progressPercentage}%` }}
                   />
                 </div>
               </div>
 
-              <div style={{ fontSize: '0.9375rem', color: '#4b5563', fontWeight: 500 }}>
+              <div className="stats-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20,6 9,17 4,12" />
+                </svg>
                 {getQualityLevelLabel(criterion.qualityLevel)}
               </div>
             </div>
           );
         })}
-      </div>
-
-      <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-        <button onClick={loadSummary}>
-          Daten aktualisieren
-        </button>
       </div>
     </div>
   );

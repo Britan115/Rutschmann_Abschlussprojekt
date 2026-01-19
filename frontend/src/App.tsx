@@ -14,73 +14,70 @@ function App() {
   const handlePersonSaved = (person: Person) => {
     setCurrentPerson(person);
     setViewMode('criteria');
-    alert(`Person "${person.vorname} ${person.name}" wurde erfolgreich gespeichert!`);
+  };
+
+  const getInitials = (person: Person) => {
+    return `${person.vorname.charAt(0)}${person.name.charAt(0)}`;
   };
 
   return (
     <div className="App">
-      <header style={{ 
-        padding: '1.25rem 2rem', 
-        backgroundColor: '#ffffff', 
-        borderBottom: '1px solid #e5e7eb',
-        marginBottom: '2rem',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-      }}>
-        <h1 style={{ 
-          margin: 0, 
-          fontSize: '1.5rem', 
-          fontWeight: 700, 
-          color: '#1a1a1a' 
-        }}>
-          IPA-Kriterien Erfassungsapplikation
-        </h1>
+      <header className="app-header">
+        <div className="app-header-content">
+          <div className="app-logo">
+            <div className="app-logo-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 11l3 3L22 4" />
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+              </svg>
+            </div>
+            <div>
+              <div className="app-title">IPA Tracker</div>
+              <div className="app-subtitle">Bewertungskriterien verwalten</div>
+            </div>
+          </div>
+        </div>
       </header>
-      <main style={{ padding: '0 2rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
+
+      <main className="app-main">
         {!currentPerson ? (
           <PersonForm onSuccess={handlePersonSaved} />
         ) : (
-          <div>
-            <div style={{ 
-              marginBottom: '1.5rem', 
-              padding: '1rem 1.5rem', 
-              backgroundColor: '#ffffff', 
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb',
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-            }}>
-              <span style={{ color: '#1a1a1a', fontSize: '1rem', fontWeight: 500 }}>
-                <strong style={{ fontWeight: 700 }}>Erfasste Person:</strong> {currentPerson.vorname} {currentPerson.name} - {currentPerson.thema}
-              </span>
+          <div className="animate-fade-in">
+            <div className="person-banner">
+              <div className="person-avatar">
+                {getInitials(currentPerson)}
+              </div>
+              <div className="person-info">
+                <div className="person-name">{currentPerson.vorname} {currentPerson.name}</div>
+                <div className="person-theme">{currentPerson.thema}</div>
+              </div>
             </div>
 
-            <nav style={{ 
-              marginBottom: '2rem', 
-              display: 'flex', 
-              gap: '1.5rem', 
-              justifyContent: 'center',
-              flexWrap: 'wrap'
-            }}>
+            <nav className="nav-tabs">
               <button
+                className={`nav-tab ${viewMode === 'criteria' ? 'active' : ''}`}
                 onClick={() => setViewMode('criteria')}
-                style={{
-                  backgroundColor: viewMode === 'criteria' ? '#2563eb' : '#6b7280',
-                  padding: '18px 40px',
-                  fontSize: '1.125rem',
-                  minHeight: '60px',
-                }}
               >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                  <polyline points="14,2 14,8 20,8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
                 Kriterien bearbeiten
               </button>
               <button
+                className={`nav-tab ${viewMode === 'dashboard' ? 'active' : ''}`}
                 onClick={() => setViewMode('dashboard')}
-                style={{
-                  backgroundColor: viewMode === 'dashboard' ? '#2563eb' : '#6b7280',
-                  padding: '18px 40px',
-                  fontSize: '1.125rem',
-                  minHeight: '60px',
-                }}
               >
-                Dashboard anzeigen
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+                  <rect x="3" y="3" width="7" height="7" />
+                  <rect x="14" y="3" width="7" height="7" />
+                  <rect x="14" y="14" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" />
+                </svg>
+                Dashboard
               </button>
             </nav>
 
